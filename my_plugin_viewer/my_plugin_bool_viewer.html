@@ -1,0 +1,185 @@
+<html>
+<head>
+
+<title>Bool Viewer 001</title>
+
+<meta charset="UTF-8" >
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="./p_data/css/style_responsive.css" />
+
+<style>
+
+
+  .viewerBool {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-between;
+    padding: 5px 10px;
+    margin: 1px;
+    border-radius: 5px;
+    /* border: 1px solid black; */
+    color: #333333;
+  } 
+  .viewerBool.viewerDisabled { /* todo: use classes for txt colors */
+    color: #666666;
+  } 
+  .viewerBool.rrttll { 
+    direction: rtl;
+  } 
+
+  .viewerTitle {}
+  .viewerText {} 
+ 
+   table { margin: 20px; } 
+  .chk { text-align: right; }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content">
+  <div class="container containerLTR floated" >
+
+    <h1>Bool Viewer</h1>
+	
+	<p>Check \ UnCheck a checkbox to change bool value:</p>
+
+<table width="80%" border="0" cellspacing="2" cellpadding="2">
+
+  <tr><td class="chk" ><input type="checkbox" name="chk1" class="chkBool"></td><td><div class="myViewer" id="myViewer1"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk2" class="chkBool"></td><td><div class="myViewer viewerDisabled" id="myViewer2"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk3" class="chkBool"></td><td><div class="myViewer" id="myViewer3"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk4" class="chkBool"></td><td><div class="myViewer" id="myViewer4"></div></td></tr>
+
+  <tr><td class="chk" ><input type="checkbox" name="chk11" class="chkBool"></td><td><div class="myViewer rrttll" id="myViewer11"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk13" class="chkBool"></td><td><div class="myViewer rrttll" id="myViewer13"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk14" class="chkBool"></td><td><div class="myViewer rrttll" id="myViewer14"></div></td></tr>
+
+  </table>
+  </div>
+  </div>
+
+<script>
+
+class viewMeColors {
+  constructor(){
+    this.colBgRed = "#de6262";
+    this.colBgGreen = "#6ec580";
+    this.colBgGray = "#CECECE";
+    this.colFgTxt = "#333333";
+    this.colBlue = "#63A9DD";
+  }
+    
+  get bgRed() { return this.colBgRed; }
+  get bgGreen() { return this.colBgGreen; }
+  get bgGray() { return this.colBgGray; }
+  get fgTxt() { return this.colFgTxt; }
+  get blue() { return this.colBlue; }
+} // class viewMeColors 
+
+(function($){
+
+$.fn.viewMeAsBool = function (options) {
+  // based on https://stackoverflow.com/questions/1034306/public-functions-from-within-a-jquery-plugin
+
+  // dbg // console.log("viewMeAsBool!"); // dbg
+  var viewerColors = new viewMeColors();
+
+  var defaults = {
+      viewerTitle: "Viewer Title",
+      viewerText: ["OFF", "ON"],
+      viewerColorsBg: [viewerColors.bgGray, viewerColors.bgGreen],
+      // viewerColorsFg: [viewerColors.fgTxt, viewerColors.fgTxt],
+  };
+  var settings = $.extend(defaults, options);
+  var $this = this;
+    
+  if (this.length > 1) {                                       // support multiple elements
+      this.each(function() { $(this).viewMeAsBool(options) });
+      return this;
+  }
+
+    // public methods:
+
+  this.init = function() {
+
+    $this.append( "<div class='viewerTitle'>" + settings.viewerTitle + "</div>" );
+    $this.append( "<div class='viewerText'>" + "</div>" );
+
+    $this.addClass("viewerBool");
+
+    var newVal = 0; 
+    $this.setVal(newVal);
+
+    return this;
+  };
+
+
+  this.setVal = function(newVal) {
+
+    $this.find(".viewerText").text(settings.viewerText[newVal]);
+    $this.css({
+      // "color": settings.viewerColorsFg[newVal], 
+      "background-color": settings.viewerColorsBg[newVal]
+    });
+
+    }
+
+  return this.init();	
+} // $.fn.viewMeAsBool
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+
+  var viewerColors = new viewMeColors();
+	
+  var myViewers = {
+    "myViewer1": $('#myViewer1').viewMeAsBool({
+        viewerTitle: 'test 1 - gray | green',
+        }), 
+    "myViewer2": $('#myViewer2').viewMeAsBool({
+        viewerTitle: 'test 2 - gray | green',
+        }),
+    "myViewer3": $('#myViewer3').viewMeAsBool({
+        viewerTitle: 'test 3 - alarm - gray | red',
+        viewerText: ["X", "V"],
+        viewerColorsBg: [viewerColors.bgGray, viewerColors.bgRed],
+        }), 
+    "myViewer4": $('#myViewer4').viewMeAsBool({
+        viewerTitle: 'test 4 - blue | red',
+        viewerText: ["COLD", "HOT"],
+        viewerColorsBg: [viewerColors.blue, viewerColors.bgRed],
+        }),
+
+    "myViewer11": $('#myViewer11').viewMeAsBool({
+        viewerTitle: 'ניסיון 1',
+        }), 
+    "myViewer13": $('#myViewer13').viewMeAsBool({
+        viewerTitle: 'ניסיון 3 אזעקה',
+        viewerText: ["X", "V"],
+        viewerColorsBg: [viewerColors.bgGray, viewerColors.bgRed],
+        }), 
+     "myViewer14": $('#myViewer14').viewMeAsBool({
+        viewerTitle: 'ניסיון 4',
+        viewerText: ["קר", "חם"],
+        viewerColorsBg: [viewerColors.blue, viewerColors.bgRed],
+        }),
+   };
+	
+
+    $('.chkBool').change(function() {
+        let newVal = ($(this).is(':checked')) ? 1 : 0;
+        let id = $(this).attr("name").substr(3); // "chkN" -> "N"
+        myViewers["myViewer" + id].setVal(newVal);
+    });
+   
+});
+</script>
+
+</body>
+</html>

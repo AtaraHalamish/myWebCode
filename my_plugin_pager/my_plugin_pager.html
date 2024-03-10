@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+
+<title>My Pager Plugin</title>
+
+<meta charset="UTF-8" >
+<!-- link rel="stylesheet" href="css/admin.css" type="text/css" -->
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+
+  li {
+    padding: 5px;
+  }
+
+  .pager {
+    text-align: center;
+    padding-top: 10px;
+  } 
+
+
+  .pager .btn {
+    cursor: pointer; cursor: hand;
+    border: 1px solid #999999;
+    background-color: #ffffff;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 3px;
+  }
+
+  .pager .btn:hover {
+    background-color: #0096ec;
+  }
+  
+  .pager .btn.btn_active {
+    color: #0096ec;
+    background-color: #ffffff;
+    border: 2px solid #0096ec;
+    cursor: auto;
+   }
+   
+  .pager .btn.btn_disabled {
+    background-color: #edfced;
+    border: 1px solid #eeeeee;
+    cursor: auto;
+   }
+
+</style>
+
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+
+  <tr><td class="link">&nbsp;</td></tr>
+
+  <tr><td class="title">My Pager Plugin</td></tr>
+
+  <tr><td class="link"><hr class="sep" /></td></tr>
+
+  <tr><td>
+<br /> // based on 
+<br /> // https://stackoverflow.com/questions/68727010/how-to-add-proper-pagination-to-dynamically-created-html-table-without-using-any
+<br /> // https://stackoverflow.com/a/68920097/262923
+
+  </td></tr>
+
+  <tr><td class="link"><hr class="sep" /></td></tr>
+
+  <tr><td class="pager" ><span id="myPager"></span></td></tr>
+
+  <tr><td class="link"><hr class="sep" /></td></tr>
+
+  <tr><td>
+
+
+<ul class='myList' id='myList' >
+<!--
+  <li id='f0'>item 0</li>  -->
+  <li id='f1'>item 1</li>
+  <li id='f2'>item 2</li>
+  <li id='f3'>item 3</li>
+  <li id='f4'>item 4</li>
+  <li id='f5'>item 5</li>
+  <li id='f6'>item 6</li>
+  <li id='f7'>item 7</li>
+  <li id='f8'>item 8</li>
+  <li id='f9'>item 9</li>
+  <li id='f10'>item 10</li>
+  <li id='f11'>item 11</li>
+  <li id='f12'>item 12</li>
+  <li id='f13'>item 13</li>
+  <li id='f14'>item 14</li>
+  <li id='f15'>item 15</li>
+  <li id='f16'>item 16</li>
+  <li id='f17'>item 17</li>
+  <li id='f18'>item 18</li>
+  <li id='f19'>item 19</li>
+  <li id='f20'>item 20</li>
+  <li id='f21'>item 21</li>
+  <li id='f22'>item 22</li>
+  <li id='f23'>item 23</li>
+  <li id='f24'>item 24</li>
+  <li id='f25'>item 25</li>
+  <li id='f26'>item 26</li>
+  <li id='f27'>item 27</li>
+  <li id='f28'>item 28</li>
+  <li id='f29'>item 29</li>
+  <li id='f30'>item 30</li>
+  <li id='f31'>item 31</li>
+  <li id='f32'>item 32</li>
+  <li id='f33'>item 33</li>
+  <li id='f34'>item 34</li>
+  <li id='f35'>item 35</li>
+  <li id='f36'>item 36</li>
+  <li id='f37'>item 37</li>
+  <li id='f38'>item 38</li>
+  <li id='f39'>item 39</li>
+  <li id='f40'>item 40</li>
+  <li id='f41'>item 41</li>
+  <li id='f42'>item 42</li>
+
+</ul>
+
+  </td></tr>
+  </table>
+
+<script>
+
+(function($){
+
+  $.fn.pageMe = function (opts) {
+// based on 
+// https://stackoverflow.com/questions/68727010/how-to-add-proper-pagination-to-dynamically-created-html-table-without-using-any
+// https://stackoverflow.com/a/68920097/262923
+
+    // dbg // console.log("pageMe!"); // dbg
+
+    var $this = this;
+    var defaults = {
+      perPage: 10
+    };
+    var settings = $.extend(defaults, opts);
+
+    var listElement = $this;
+    var perPage = settings.perPage;
+    var children = listElement.children();
+    var pager = $('.myPager');
+    var numItems = children.length; // children.size();
+    var numPages = Math.ceil(numItems / perPage);
+    var NON_VALID_PAGE = -1;
+
+    if (typeof settings.pagerSelector != "undefined") {
+        pager = $(settings.pagerSelector);
+    }
+
+  this.init = function() {
+    
+    $('<span class="pager info" >Displaying <span class="pager_nStart" >1</span> - <span class="pager_nEnd" >1</span> of <span class="pager_nMax" >1</span> Items</span>').appendTo(pager); // EN // 
+    // $('<span class="pager info" >Afficher <span class="pager_nStart" >1</span> - <span class="pager_nEnd" >1</span> de <span class="pager_nMax" >1</span> fichiers</span>').appendTo(pager); // FR //
+    $('<br /><br />').appendTo(pager);
+
+    if (numPages > 1) {
+      $('<span class="btn pager_first"> &lt;&lt; </span>').appendTo(pager);
+      $('<span class="btn pager_prev"> &lt; </span>').appendTo(pager);
+	
+      var curr = 0;
+      while (numPages > curr) {
+        $('<span id="pg' + (curr + 1) + '" class="btn pager_num">' + (curr + 1) + '</span>').appendTo(pager);
+	    curr++;
+      }
+	  
+      $('<span class="btn pager_next"> &gt; </span>').appendTo(pager);
+      $('<span class="btn pager_last"> &gt;&gt; </span>').appendTo(pager);
+
+      $('<br /><br />').appendTo(pager);
+      $('<span class="btn pager_all"> Show All </span>').appendTo(pager); // EN // 
+      // $('<span class="btn pager_all"> Tout afficher </span>').appendTo(pager); // FR
+    } // if (numPages > 1)
+	
+    var nMax = numItems;
+    $('.pager_nMax').text(nMax); 
+
+	if (nMax == 0) {
+		$('#myPager').css('display', 'none'); // hide(); 		
+	}
+
+    pager.data("perPage", perPage);
+    pager.data("nMax", nMax);
+    pager.data("listSelector", settings.listSelector);
+    pager.data("numPages", numPages);
+    pager.data("fCallBack", settings.fCallBack);
+	
+	var clickedPage = 0; // 1st page, zero-based
+    pager.data("curr", clickedPage);
+    $this.goTo(clickedPage); // $.fn.pageMe.goTo(clickedPage);
+
+
+
+    pager.find('.pager_num').click(function () {
+        var clickedPage = $(this).html().valueOf() - 1;
+        // dbg // console.log("clickedPage:" + clickedPage); // dbg
+        $this.goTo(clickedPage); // $.fn.pageMe.goTo(clickedPage);
+        return false;
+    });
+    pager.find('.pager_prev').click(function () {
+        var currPage = parseInt(pager.data("curr"));
+        if ((currPage > 0) && (currPage != NON_VALID_PAGE)) { // zero-based
+          var goToPage = currPage - 1;
+          $this.goTo(goToPage); // $.fn.pageMe.goTo(goToPage);
+        }
+        return false;
+    });
+    pager.find('.pager_next').click(function () {
+        var currPage = parseInt(pager.data("curr"));
+        if ((currPage < (numPages - 1)) && (currPage != NON_VALID_PAGE)) { // zero-based
+          var goToPage = currPage + 1;
+          $this.goTo(goToPage); // $.fn.pageMe.goTo(goToPage);
+        }
+        return false;
+    });
+    pager.find('.pager_first').click(function () {
+        var goToPage = 0;
+        $this.goTo(goToPage); // $.fn.pageMe.goTo(goToPage);
+        return false;
+    });
+    pager.find('.pager_last').click(function () {
+        var goToPage = numPages - 1;
+        $this.goTo(goToPage); // $.fn.pageMe.goTo(goToPage);
+        return false;
+    });
+    pager.find('.pager_all').click(function () {
+        showAll(); // $.fn.pageMe.showAll();
+        return false;
+    });
+
+
+    return this;
+  };
+
+  function showAll() { // $.fn.pageMe.showAll = function() { // private method.  // function showAll() {
+      // var pager = $('#myPager');
+      var nMax = pager.data("nMax");
+      var listSelector = pager.data("listSelector");
+      // var fCallBack = pager.data("fCallBack");
+
+      var startAt = 0;
+      var endOn = this.nMax;
+
+      var nStart = 1 + startAt;
+      var nEnd = Math.min(endOn, nMax); 
+      $('.pager_nStart').text(nStart); 
+      $('.pager_nEnd').text(nEnd); 
+
+      pager.find('.pager_all').addClass('btn_active');
+      pager.find('.pager_num').removeClass('btn_active');
+
+      // children.show(); // show all.
+      $(listSelector).children().show(); // show all.
+
+      pager.find('.pager_prev').addClass('btn_disabled');
+      pager.find('.pager_next').addClass('btn_disabled');
+      pager.find('.pager_first').removeClass('btn_disabled');
+      pager.find('.pager_last').removeClass('btn_disabled');
+
+      pager.data("curr", NON_VALID_PAGE);
+
+       if (typeof settings.fCallBack != "undefined") {
+         f = settings.fCallBack;
+         f(nStart, nEnd);
+       }
+
+	  // if (typeof fCallBack != "undefined") {
+      //   fCallBack(nStart, nEnd);
+      // }
+
+    } // function showAll()
+
+
+  // public methods:
+
+  this.goTo = function(page) { // $.fn.pageMe.goTo = function( page ) { // public method. // function goTo(page) {
+      var pager = $('#myPager');
+      var perPage = pager.data("perPage");
+      var nMax = pager.data("nMax");
+      var listSelector = pager.data("listSelector");
+      var numPages = pager.data("numPages");
+      var fCallBack = pager.data("fCallBack");
+
+      var startAt = page * perPage;
+      var endOn = startAt + perPage;
+
+      var nStart = 1 + startAt;
+      var nEnd = Math.min(endOn, nMax); 
+      $('.pager_nStart').text(nStart); 
+      $('.pager_nEnd').text(nEnd); 
+
+      var currpg = $("#pg" + (page + 1));
+      currpg.addClass("btn_active").siblings().removeClass("btn_active");
+      // children.css('display', 'none').slice(startAt, endOn).show(); // hide all, show slice.
+      $(listSelector).children().css('display', 'none').slice(startAt, endOn).show(); // hide all, show slice.
+	  
+      if (page > 0) { // zero-based
+          pager.find('.pager_prev').removeClass('btn_disabled');
+          pager.find('.pager_first').removeClass('btn_disabled');
+      } else {
+          pager.find('.pager_prev').addClass('btn_disabled');
+          pager.find('.pager_first').addClass('btn_disabled');
+      }
+      if (page < (numPages - 1)) {
+          pager.find('.pager_next').removeClass('btn_disabled');
+          pager.find('.pager_last').removeClass('btn_disabled');
+      } else {
+          pager.find('.pager_next').addClass('btn_disabled');
+          pager.find('.pager_last').addClass('btn_disabled');
+      }
+	  
+      pager.data("curr", page);
+
+      // if (typeof settings.fCallBack != "undefined") {
+	  if (typeof fCallBack != "undefined") {
+        fCallBack(nStart, nEnd);
+      }
+
+  } // function goTo(page)
+
+
+  this.UpdatePages = function() { // $.fn.pageMe.UpdatePages = function() { // public method. 
+    // dbg // console.log(" UpdatePages " ); // dbg // 
+    var goToPage = 0;
+    $this.goTo(goToPage); // $.fn.pageMe.goTo(goToPage);
+  };
+
+  return this.init();	
+
+  };
+  
+  
+
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+	var PAGER_ITEMS_PER_PAGE = 10; 
+	
+	function fUpdateItems(iStart, iEnd) {
+		// dbg // console.log(" fUpdateItems " + iStart + " .. " + iEnd); // dbg // 
+
+	} 
+	
+	objPager = $('#myList').pageMe({
+		pagerSelector: '#myPager',
+		listSelector: '#myList',
+		perPage: PAGER_ITEMS_PER_PAGE,
+		fCallBack: fUpdateItems
+	}); 
+	
+	objPager.goTo(3);  // zero-based
+	
+});
+</script>
+
+</body>
+</html>
