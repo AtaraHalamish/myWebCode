@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+<head>
+
+<title>Numbers Viewer 001</title>
+
+<meta charset="UTF-8" >
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="./p_data/css/style_responsive.css" />
+
+<style>
+
+  .viewerWidget {
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    background-color: #fefefe;
+    color: #444444;
+    margin: 1px;
+ }
+  .viewerWidget.rrttll { 
+    direction: rtl;
+  } 
+
+  .viewerTitle { 
+    color: #222222;
+    padding: 2px 5px;
+	padding-bottom: 0;
+	text-align: left;
+  } 
+  .viewerWidget.rrttll .viewerTitle { 
+	text-align: right;
+  } 
+
+  .viewerNumbers {
+   } 
+ .viewerNumber {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-between;  /* space-around */
+    padding: 5px 10px;
+	/* border: 1px dotted #aaaaaa; */
+	text-align: center;
+  } 
+  .viewerNumber {   
+	border-top: 1px dotted #cccccc;
+  }
+  .viewerNumber:last-child  {  /* last child of its parent */
+      /* border-bottom: 1px dotted #00eeee; */
+  }
+  .viewerNumber.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerNumber .viewerVal { 
+    color: #6ec580;
+	font-size: 110%;
+	direction: ltr; /*  allways! */
+  } 
+  .viewerErr.viewerNumber .viewerVal { 
+    color: #de6262;
+  } 
+
+  .viewerNumber .viewerText { font-size: 80%; }
+  .viewerNumber .viewerDesc { }
+  .viewerNumber .viewerValUnit { padding-left: 2px; }
+ 
+   table { margin: 20px; background-color: #eeeeee; } 
+  .chk { text-align: right; }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content">
+  <div class="container containerLTR floated" >
+
+    <h1>Numbers Viewer</h1>
+	
+<table width="80%" border="0" cellspacing="2" cellpadding="2">
+
+  <tr><td><div class="viewerWidget" id="myViewer1"></div></td></tr>
+  <tr><td><div class="viewerWidget" id="myViewer2"></div></td></tr>
+  <tr><td><div class="viewerWidget" id="myViewer3"></div></td></tr>
+ 
+  <tr><td>.</td></tr>
+ 
+  <tr><td><div class="viewerWidget rrttll" id="myViewer11"></div></td></tr>
+  <tr><td><div class="viewerWidget rrttll" id="myViewer12"></div></td></tr>
+  <tr><td><div class="viewerWidget rrttll" id="myViewer13"></div></td></tr>
+  
+  </table>
+  </div>
+  </div>
+
+<script>
+
+class viewMeColors {
+  constructor(){
+    this.colBgRed = "#de6262";
+    this.colBgGreen = "#6ec580";
+    this.colBgGray = "#CECECE";
+    this.colFgTxt = "#333333";
+    this.colBlue = "#63A9DD";
+  }
+    
+  get bgRed() { return this.colBgRed; }
+  get bgGreen() { return this.colBgGreen; }
+  get bgGray() { return this.colBgGray; }
+  get fgTxt() { return this.colFgTxt; }
+  get blue() { return this.colBlue; }
+} // class viewMeColors 
+
+(function($){
+
+$.fn.viewMeAsNumbers = function (options) {
+
+  // dbg // console.log("viewMeAsNumbers!"); // dbg
+  var viewerColors = new viewMeColors();
+
+  var defaults = {
+      viewerTitle: "",
+      // viewerColorsBg: [viewerColors.bgGray],
+      // viewerColorsFg: [viewerColors.fgTxt],
+      // isErr: false,
+      // isHideAvg: true,
+	  valueDec: 1 // numOfDecimals: 1
+  };
+  var settings = $.extend(defaults, options);
+  var $this = this;
+    
+  if (this.length > 1) {                                       // support multiple elements
+      this.each(function() { $(this).viewMeAsNumbers(options) });
+      return this;
+  }
+
+
+  // public methods:
+
+  this.init = function() {
+
+    $this.append("<div class='viewerTitle'>" + settings.viewerTitle + "</div>");
+    var strAll = "";
+    var arr = settings.arr;
+	var item;
+    for (var i = 0; i < arr.length; i++) {
+      item = arr[i];
+      strAll = strAll + "<div class='viewerNumber' id='" + item.id + "'><span class='viewerDesc'>" + item.desc + "</span>" + "<span class='viewerVal'><span class='viewerValNum'>" + "</span>" + "<span class='viewerValUnit'>" + item.units + "</span></span>" + "</div>";
+    }
+    $this.append("<div class='viewerNumbers'>" + strAll + "</div>");
+	
+	//if (settings.isHideAvg) {
+    //  $this.find(".viewerAvg").hide();
+	//}
+
+    //$this.setVal();
+    $this.setErr(settings.isErr);
+
+    return this;
+  };
+
+
+  this.setVal = function(id, newVal) {
+  
+    let item = settings.arr.find(a=>a.id == id);
+    let valDec = (item && (typeof item.valueDec !== "undefined")) ? item.valueDec : settings.valueDec;
+	
+	
+
+    $this.find("#" + id).find(".viewerValNum").text(newVal.toFixed(valDec));
+    // $this.find("#" + id).find(".viewerValNum").text(newVal.toFixed(settings.numOfDecimals));
+
+    // $this.find(".viewerValMin").text(valMin.toFixed(settings.numOfDecimals));
+  } 
+  
+  this.setErr = function(id, newErrVal) {
+    if (newErrVal) {
+      $this.find("#" + id).addClass("viewerErr");
+	} else {
+      $this.find("#" + id).removeClass("viewerErr");
+	}
+  } 
+
+
+  return this.init();	
+} // $.fn.viewMeAsNumbers
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+  var viewerColors = new viewMeColors();
+  var strDeg = String.fromCharCode(176) + "C";
+  var strDegF = String.fromCharCode(176) + "F";
+  var strM3H = "m³/H";
+  var arr = [
+    {id: "id1", desc: "var 11", units: strDeg, valueDec: 0}, 
+	{id: "id2", desc: "var 222", units: strDegF, valueDec: 1}, 
+	{id: "id3", desc: "var 33 33", units: strM3H, valueDec: 2},
+	{id: "id4", desc: "var 4444", units: ""}
+	];
+  var arrHE = [
+    {id: "id11", desc: "ניסיון 11", units: strDegF, valueDec: 0}, 
+	{id: "id12", desc: "ניסיון 222", units: strDeg, valueDec: 1}, 
+	{id: "id13", desc: "ניסיון 33 33", units: strM3H, valueDec: 2}
+	];
+	
+  var myViewers = {
+    "myViewer1": $('#myViewer1').viewMeAsNumbers({
+        viewerTitle: 'test 1',
+		arr: arr
+        }), 
+		
+    "myViewer11": $('#myViewer11').viewMeAsNumbers({
+		lang: "HE",
+        viewerTitle: 'ניסיון 1',
+		arr: arrHE,
+        }), 			
+   };
+
+   myViewers["myViewer1"].setVal("id1", 10);
+   myViewers["myViewer1"].setVal("id2", 20);
+   myViewers["myViewer1"].setVal("id3", 30);
+   myViewers["myViewer1"].setVal("id4", 40);
+
+   myViewers["myViewer1"].setErr("id2", true);
+	   
+   myViewers["myViewer11"].setVal("id11", 10);
+   myViewers["myViewer11"].setVal("id12", 20);
+   myViewers["myViewer11"].setVal("id13", 30);
+
+   myViewers["myViewer11"].setErr("id13", true);
+	   
+});
+</script>
+
+</body>
+</html>
