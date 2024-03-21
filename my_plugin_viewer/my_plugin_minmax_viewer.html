@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+<head>
+
+<title>MinMax Viewer 001</title>
+
+<meta charset="UTF-8" >
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="./p_data/css/style_responsive.css" />
+
+<style>
+
+  .viewerWidget {
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    background-color: #fefefe;
+    color: #444444;
+    margin: 1px;
+ }
+  .viewerWidget.rrttll { 
+    direction: rtl;
+  } 
+
+  .viewerTitle { 
+    color: #222222;
+    padding: 2px 5px;
+	padding-bottom: 0;
+	text-align: left;
+  } 
+  .viewerWidget.rrttll .viewerTitle { 
+	text-align: right;
+  } 
+
+  .viewerMinMax {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-around;  /* space-between */
+    padding: 0 10px;
+    /* border: 1px solid black; */
+	text-align: center;
+  } 
+  .viewerMinMax.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerMinMax .viewerVal { 
+    color: #6ec580;
+	font-size: 110%;
+  } 
+  .viewerErr .viewerMinMax .viewerVal { 
+    color: #de6262;
+  } 
+  .xviewerMinMax.rrttll { 
+    direction: rtl;
+  } 
+
+  .viewerMinMax .viewerText { font-size: 80%; }
+  .viewerMinMax .viewerValUnit { padding-left: 2px; }
+ 
+   table { margin: 20px; background-color: #eeeeee; } 
+  .chk { text-align: right; }
+  
+  div#content table td input[type=button] { width:100px; }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content">
+  <div class="container containerLTR floated" >
+
+    <h1>MinMax Viewer</h1>
+	
+<table width="80%" border="0" cellspacing="2" cellpadding="2">
+
+  <tr><td><div class="viewerWidget" id="myViewer1"></div></td></tr>
+  <tr><td><div class="viewerWidget" id="myViewer2"></div></td></tr>
+  <tr><td><div class="viewerWidget" id="myViewer3"></div></td></tr>
+
+  <tr><td><input type="button" value="Add arr item:" class="addVal" > </input><input type="number" name="num1" id="num1" class="setNum" step="5" value="10" ></td></tr>
+ 
+  <tr><td>.</td></tr>
+ 
+  <tr><td><div class="viewerWidget rrttll" id="myViewer11"></div></td></tr>
+  <tr><td><div class="viewerWidget rrttll" id="myViewer12"></div></td></tr>
+  <tr><td><div class="viewerWidget rrttll" id="myViewer13"></div></td></tr>
+  
+  </table>
+  </div>
+  </div>
+
+<script>
+
+class viewMeColors {
+  constructor(){
+    this.colBgRed = "#de6262";
+    this.colBgGreen = "#6ec580";
+    this.colBgGray = "#CECECE";
+    this.colFgTxt = "#333333";
+    this.colBlue = "#63A9DD";
+  }
+    
+  get bgRed() { return this.colBgRed; }
+  get bgGreen() { return this.colBgGreen; }
+  get bgGray() { return this.colBgGray; }
+  get fgTxt() { return this.colFgTxt; }
+  get blue() { return this.colBlue; }
+} // class viewMeColors 
+
+(function($){
+
+$.fn.viewMeAsMinMax = function (options) {
+
+  // dbg // console.log("viewMeAsMinMax!"); // dbg
+  var viewerColors = new viewMeColors();
+
+  var defaults = {
+      viewerTitle: "",
+      // viewerColorsBg: [viewerColors.bgGray],
+      // viewerColorsFg: [viewerColors.fgTxt],
+      isErr: false,
+      isHideAvg: true,
+	  numOfDecimals: 1
+  };
+  var settings = $.extend(defaults, options);
+  var $this = this;
+    
+  if (this.length > 1) {                                       // support multiple elements
+      this.each(function() { $(this).viewMeAsMinMax(options) });
+      return this;
+  }
+
+
+  // public methods:
+
+  this.init = function() {
+
+    var strMin = "min:"; if (settings.lang == "HE") { strMin = "מינ:"; }
+    var strAvg = "avg:"; if (settings.lang == "HE") { strAvg = "ממוצע:"; }
+    var strMax = "max:"; if (settings.lang == "HE") { strMax = "מקס:"; }
+
+    $this.append("<div class='viewerTitle'>" + settings.viewerTitle + "</div>");
+
+    var vMin = "<div class='viewerMin'><span class='viewerText'>" + strMin + "</span><br/>" + "<span class='viewerVal'><span class='viewerValMin'>" + "</span>" + "<span class='viewerValUnit'>" + settings.unit + "</span></span>" + "</div>";
+    var vAvg = "<div class='viewerAvg'><span class='viewerText'>" + strAvg + "</span><br/>" + "<span class='viewerVal'><span class='viewerValAvg'>" + "</span>" + "<span class='viewerValUnit'>" + settings.unit + "</span></span>" + "</div>";
+    var vMax = "<div class='viewerMax'><span class='viewerText'>" + strMax + "</span><br/>" + "<span class='viewerVal'><span class='viewerValMax'>" + "</span>" + "<span class='viewerValUnit'>" + settings.unit + "</span></span>" + "</div>";
+
+    $this.append("<div class='viewerMinMax'>" + vMin + vAvg + vMax + "</div>");
+	
+	if (settings.isHideAvg) {
+      $this.find(".viewerAvg").hide();
+	}
+
+    $this.setVal(settings.arr);
+    $this.setErr(settings.isErr);
+
+    return this;
+  };
+
+
+  this.setVal = function(arr) {
+
+    // var arr = settings.arr;
+    var count = arr.length;
+	
+	if (count < 1) { return }
+	
+    var valMin = arr[0];
+    var valMax = arr[0];
+    var sum = arr[0];
+  
+    for (var i = 1; i < arr.length; i++) { // index 0 is already considered
+      if (arr[i] < valMin) {
+        valMin = arr[i];
+      }
+      if (arr[i] > valMax) {
+        valMax = arr[i];
+      }
+      sum += Number(arr[i]);
+    }
+    
+    $this.find(".viewerValMin").text(valMin.toFixed(settings.numOfDecimals));
+    $this.find(".viewerValMax").text(valMax.toFixed(settings.numOfDecimals));
+    $this.find(".viewerValAvg").text((sum / count).toFixed(settings.numOfDecimals));
+  } 
+  
+  this.setErr = function(newErrVal) {
+    if (newErrVal) {
+      $this.addClass("viewerErr");
+	} else {
+      $this.removeClass("viewerErr");
+	}
+  } 
+
+
+  return this.init();	
+} // $.fn.viewMeAsMinMax
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+  var viewerColors = new viewMeColors();
+  var strDeg = String.fromCharCode(176) + "C";
+  var strDegF = String.fromCharCode(176) + "F";
+  var strM3H = "m³/H";
+  var arr = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5];
+  var arrFloat = [6, 7, 8, 9, 10, 11, 12, 13, 14.3, 1.2, 2, 3, 4, 5];
+	
+  var myViewers = {
+    "myViewer1": $('#myViewer1').viewMeAsMinMax({
+        viewerTitle: 'test 1',
+		unit: strDeg,
+		arr: arr
+        }), 
+    "myViewer2": $('#myViewer2').viewMeAsMinMax({
+		unit: strDegF,
+		arr: arrFloat,
+		isHideAvg: false
+        }), 
+    "myViewer3": $('#myViewer3').viewMeAsMinMax({
+        viewerTitle: 'test 3',
+		unit: "%",
+		isErr: true,
+		arr: arrFloat,
+		isHideAvg: false,
+		numOfDecimals: 2
+        }), 
+		
+    "myViewer11": $('#myViewer11').viewMeAsMinMax({
+		lang: "HE",
+        viewerTitle: 'ניסיון 1',
+		unit: strDeg,
+		arr: arr,
+		numOfDecimals: 0
+        }), 
+    "myViewer12": $('#myViewer12').viewMeAsMinMax({
+		lang: "HE",
+        viewerTitle: '',
+		unit: strDegF,
+		isHideAvg: false,
+		arr: arr
+        }), 
+    "myViewer13": $('#myViewer13').viewMeAsMinMax({
+		lang: "HE",
+        viewerTitle: 'ניסיון 3',
+		unit: strM3H,
+		isErr: true,
+		arr: arrFloat
+        }), 
+		
+	
+   };
+
+   myViewers["myViewer1"].setErr(true);
+   
+   $(".addVal").click(function(){
+     let newVal = $("#num1").val(); newVal = parseInt(newVal, 10);
+	 arr.push(newVal);
+     console.log(arr);
+     myViewers["myViewer1"].setVal(arr);
+   });
+	   
+});
+</script>
+
+</body>
+</html>
