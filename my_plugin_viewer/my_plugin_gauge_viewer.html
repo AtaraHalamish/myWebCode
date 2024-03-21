@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+<head>
+
+<title>Gauge Viewer 001</title>
+
+<meta charset="UTF-8" >
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="./p_data/js/gauge_2.1.7.min.js"></script>
+<script type="text/javascript" src="./p_data/js/gauge_radial_2.1.7_.js "></script>
+<link rel="stylesheet" type="text/css" media="all" href="./p_data/css/style_responsive.css" />
+
+<style>
+
+  .viewerWidget {
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    background-color: #fefefe;
+    color: #444444;
+    margin: 1px;
+ }
+  .viewerWidget.rrttll { 
+    direction: rtl;
+  } 
+  .viewerWidget.viewerErr { 
+    border: 1px solid rgba(200, 50, 50, .75);
+    background-color: rgba(200, 50, 50, .25);
+  } 
+
+  .viewerTitle { 
+    color: #222222;
+    padding: 2px 5px;
+    padding-bottom: 0;
+    text-align: left;
+  } 
+  .viewerWidget.rrttll .viewerTitle { 
+    text-align: right;
+    font-family: tahoma;
+  } 
+  
+  .viewerWidget canvas { 
+    margin-bottom: -40px;
+  }
+  
+  .viewerMinMax {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-around;  /* space-between */
+    padding: 0 10px;
+    /* border: 1px solid black; */
+    text-align: center;
+  } 
+  .viewerMinMax.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerMinMax .viewerVal { 
+    color: #6ec580;
+    font-size: 110%;
+  } 
+  .viewerErr .viewerMinMax .viewerVal { 
+    color: #de6262;
+  } 
+
+  .viewerMinMax .viewerText { font-size: 80%; }
+  .viewerMinMax .viewerValUnit { padding-left: 2px; }
+ 
+   table { margin: 20px; background-color: #eeeeee; } 
+   div#content table td { text-align: center; vertical-align: top; }
+  .chk { text-align: center; }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content">
+  <div class="container containerLTR floated" >
+
+    <h1>Gauge Viewer</h1>
+	
+<table width="80%" border="0" cellspacing="2" cellpadding="2">
+    
+  <tr>
+    <td><div class="viewerWidget" id="myViewerG1"></div></td>
+    <td><div class="viewerWidget" id="myViewerG2"></div></td>
+    <td><div class="viewerWidget" id="myViewerG3"></div></td>
+  </tr>
+
+  <tr><td colspan="3">Set Value:</td></tr>
+
+   <tr>
+     <td class="chk" ><input type="number" name="num1" id="num1" class="setNum" step="5" ></td>
+     <td class="chk" ><input type="number" name="num2" id="num2" class="setNum" step="5" ></td>
+     <td class="chk" ><input type="number" name="num3" id="num3" class="setNum" step="5" ></td>
+   </tr>
+   
+  <tr><td colspan="3">Set Error:</td></tr>
+
+   <tr>
+     <td class="chk" ><input type="checkbox" name="chk1" class="chkErr"></td>
+     <td class="chk" ><input type="checkbox" name="chk2" class="chkErr"></td>
+     <td class="chk" ><input type="checkbox" name="chk3" class="chkErr"></td>
+   </tr> 
+   
+  <tr><td colspan="3"><hr /></td></tr>
+
+  <tr>
+    <td><div class="viewerWidget rrttll" id="myViewerG11"></div></td>
+    <td><div class="viewerWidget rrttll" id="myViewerG12"></div></td>
+    <td><div class="viewerWidget rrttll" id="myViewerG13"></div></td>
+  </tr>
+ 
+  </table>
+  </div>
+  </div>
+
+<script>
+
+class viewMeColors {
+  constructor(){
+    this.colBgRed = "#de6262";
+    this.colBgGreen = "#6ec580";
+    this.colBgGray = "#CECECE";
+    this.colFgTxt = "#333333";
+    this.colBlue = "#63A9DD";
+  }
+    
+  get bgRed() { return this.colBgRed; }
+  get bgGreen() { return this.colBgGreen; }
+  get bgGray() { return this.colBgGray; }
+  get fgTxt() { return this.colFgTxt; }
+  get blue() { return this.colBlue; }
+} // class viewMeColors 
+
+(function($){
+
+$.fn.viewMeRadialGauge = function (options) {
+
+  // dbg // console.log("viewMeRadialGauge!"); // dbg
+  var viewerColors = new viewMeColors();
+
+  var colorBarProgressDefault = "rgba(50,200,50,.75)"; // green
+  var colorBarDefault = "rgba(200,200,200,.75)";
+
+	  
+
+  var defaults = {
+      viewerTitle: "",
+      // viewerColorsBg: [viewerColors.bgGray],
+      // viewerColorsFg: [viewerColors.fgTxt],
+      // isHideAvg: true,
+      isErr: false,
+	  	  
+	  numOfDecimals: 1, // == valueDec
+
+    width: 150,
+    height: 150,
+    //units: "Km/h",
+	units: "%", // strDeg, // "Km/h"
+    minValue: 0,
+    maxValue: 100,
+
+	// value: 150,
+    valueInt: 3, 
+    valueDec: 1, 
+
+    valueBox: true,
+    valueBoxStroke: 0,
+    colorValueBoxShadow: 0,
+    valueBoxBorderRadius: 0,
+    valueTextShadow: 0,
+    colorValueBoxBackground: "transparent",
+	fontValueSize: 45,
+	
+	fontNumbers: "Verdana",
+	fontValue: "Verdana",
+
+	colorMinorTicks: "#cccccc",
+	colorMajorTicks: "#cccccc",
+
+    strokeTicks: 0,
+
+    highlights: [],
+    highlightsWidth: 5,
+	colorPlate: "transparent",
+    borderShadowWidth: 0,
+    borders: false,
+ 
+    startAngle: 70,
+    ticksAngle: 220,
+
+	// needle: false,
+    needleType: "line",
+    needleWidth: 1,
+    needleStart: 6,
+    needleCircleSize: 4,
+    needleCircleInner: false,
+    colorNeedleCircleOuter: "#aaa",
+    colorNeedleCircleOuterEnd: "#aaa",
+    colorNeedle: "#aaa",
+    colorNeedleEnd: "#aaa",
+
+	barWidth: 8,
+	barShadow: 3,
+    colorBar: colorBarDefault,
+    colorBarProgress: colorBarProgressDefault,
+
+    animationDuration: 500,
+    animationRule: "linear"	  
+  };
+  var settings = $.extend(defaults, options);
+  var $this = this;
+    
+  if (this.length > 1) {                                       // support multiple elements
+      this.each(function() { $(this).viewMeRadialGauge(options) });
+      return this;
+  }
+
+
+  // public methods:
+  var gaugeN;
+
+  this.init = function() {
+
+    $this.append("<div class='viewerTitle'>" + settings.viewerTitle + "</div>");
+
+    var idCanvas = $this.attr('id') + "c";
+    var vCanvas = "<canvas id='" + idCanvas + "'>" + "</canvas>";
+
+    $this.append("<div class='viewerRadialGauge'>" + vCanvas + "</div>");
+
+    var settingsG = $.extend(settings, { renderTo: idCanvas});
+	if (settingsG.majorTicks) {
+      settingsG.minValue = settingsG.majorTicks[0];
+      settingsG.maxValue = settingsG.majorTicks[settingsG.majorTicks.length - 1];
+	}
+
+    gaugeN = new thRadialGauge(settingsG).draw();
+	
+    // $this.setVal(0);
+    $this.setErr(settings.isErr);
+
+    return this;
+  };
+
+
+  this.setVal = function(newVal) {
+    gaugeN.value = newVal;
+	
+    var hArr = gaugeN.options.highlights;
+    var hItem;
+    var hCol = colorBarProgressDefault;
+
+    for (var j=0; j< hArr.length; j++) {
+      hItem = hArr[j];
+      if ((newVal >= hItem.from) && (newVal <= hItem.to)) {
+        //console.log(hItem.color);
+    	hCol = hItem.color;
+      }
+    }
+    // console.log(colorBarDefault);
+    // console.log(hCol);
+    gaugeN.update({
+       colorBarProgress: hCol // "rgba(250,250,50,.75)",
+    });
+	
+    // var arr = settings.arr;
+    // var count = arr.length;
+	// 
+	// if (count < 1) { return }
+	// 
+    // var valMin = arr[0];
+    // 
+    // $this.find(".viewerValMin").text(valMin.toFixed(settings.numOfDecimals));
+  } 
+  
+  this.setErr = function(newErrVal) {
+    if (newErrVal) {
+      $this.addClass("viewerErr");
+	} else {
+      $this.removeClass("viewerErr");
+	}
+  } 
+
+
+  return this.init();	
+} // $.fn.viewMeRadialGauge
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+  var viewerColors = new viewMeColors();
+  var strDeg = String.fromCharCode(176) + "C";
+  var strDegF = String.fromCharCode(176) + "F";
+  var strM3H = "m³/H";
+ 
+	
+  var myViewers = {
+    "myViewer1": $('#myViewerG1').viewMeRadialGauge({
+        viewerTitle: 'test 1',
+		units: strM3H, // strDeg,
+		valueDec: 1, 
+		// arr: arr
+        }), 
+    "myViewer2": $('#myViewerG2').viewMeRadialGauge({
+		units: strDeg,
+		majorTicks: [-50, 0, 50, 100, 150, 200, 250],
+		minorTicks: 5,		
+		highlights: [ 
+		{ "from": -10, "to": 100, "color": "rgba(50, 200, 50, .75)" },   // green
+		{ "from": 120, "to": 140, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 160, "to": 190, "color": "rgba(200, 50, 50, .75)" }, // red
+		{ "from": 200, "to": 220, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 220, "to": 250, "color": "rgba(50, 200, 50, .75)" }   // green
+		], 
+		valueDec: 2, 
+
+		// arr: arrFloat,
+		// isHideAvg: false
+        }), 
+    "myViewer3": $('#myViewerG3').viewMeRadialGauge({
+        viewerTitle: 'test 3',
+		units: "%",
+		majorTicks: [0, 20, 40, 60, 80, 100],
+		minorTicks: 5,		
+		highlights: [ 
+		{ "from": 10, "to": 30, "color": "rgba(50, 200, 50, .75)" },   // green
+		{ "from": 40, "to": 65, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 70, "to": 90, "color": "rgba(200, 50, 50, .75)" } ], // red
+		valueDec: 0, 
+
+		// isErr: true,
+		// arr: arrFloat,
+		// isHideAvg: false,
+		numOfDecimals: 0
+        }), 
+
+
+    "myViewer11": $('#myViewerG11').viewMeRadialGauge({
+        viewerTitle: 'ניסיון 1',
+		units: strM3H, // strDeg,
+		valueDec: 1, 
+		// arr: arr
+        }), 
+    "myViewer12": $('#myViewerG12').viewMeRadialGauge({
+		units: strDeg,
+		majorTicks: [-50, 0, 50, 100, 150, 200, 250],
+		minorTicks: 5,		
+		highlights: [ 
+		{ "from": -10, "to": 100, "color": "rgba(50, 200, 50, .75)" },   // green
+		{ "from": 120, "to": 140, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 160, "to": 190, "color": "rgba(200, 50, 50, .75)" }, // red
+		{ "from": 200, "to": 220, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 220, "to": 250, "color": "rgba(50, 200, 50, .75)" }   // green
+		], 
+		valueDec: 2, 
+
+		// arr: arrFloat,
+		// isHideAvg: false
+        }), 
+    "myViewer13": $('#myViewerG13').viewMeRadialGauge({
+        viewerTitle: 'ניסיון 3',
+		units: "%",
+		majorTicks: [0, 20, 40, 60, 80, 100],
+		minorTicks: 5,		
+		highlights: [ 
+		{ "from": 10, "to": 30, "color": "rgba(50, 200, 50, .75)" },   // green
+		{ "from": 40, "to": 65, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 70, "to": 90, "color": "rgba(200, 50, 50, .75)" } ], // red
+		valueDec: 0, 
+
+		// isErr: true,
+		// arr: arrFloat,
+		// isHideAvg: false,
+		numOfDecimals: 0
+        }), 
+	
+   };
+
+
+
+    $('.setNum').change(function() {
+        let newVal = $(this).val();
+        let id = $(this).attr("name").substr(3); // "numN" -> "N"
+        myViewers["myViewer" + id].setVal(newVal);
+    });
+
+
+
+    $('.chkErr').change(function() {
+        let newVal = ($(this).is(':checked')) ? true : false;
+        let id = $(this).attr("name").substr(3); // "chkN" -> "N"
+        myViewers["myViewer" + id].setErr(newVal);
+    });
+
+
+   
+   myViewers["myViewer1"].setVal(60);  $("#num1").val(60);
+   myViewers["myViewer2"].setVal(70);  $("#num2").val(70);
+   myViewers["myViewer3"].setVal(80);  $("#num3").val(80);
+	   
+   myViewers["myViewer11"].setVal(20); 
+   myViewers["myViewer12"].setVal(170); 
+   myViewers["myViewer13"].setVal(55); 
+	   
+});
+</script>
+
+</body>
+</html>

@@ -52,6 +52,7 @@
   <tr><td class="chk" ><input type="checkbox" name="chk2" class="chkBool"></td><td><div class="myViewer viewerDisabled" id="myViewer2"></div></td></tr>
   <tr><td class="chk" ><input type="checkbox" name="chk3" class="chkBool"></td><td><div class="myViewer" id="myViewer3"></div></td></tr>
   <tr><td class="chk" ><input type="checkbox" name="chk4" class="chkBool"></td><td><div class="myViewer" id="myViewer4"></div></td></tr>
+  <tr><td class="chk" ><input type="checkbox" name="chk5" class="chkBool"></td><td><div class="myViewer" id="myViewer5"></div></td></tr>
 
   <tr><td class="chk" ><input type="checkbox" name="chk11" class="chkBool"></td><td><div class="myViewer rrttll" id="myViewer11"></div></td></tr>
   <tr><td class="chk" ><input type="checkbox" name="chk13" class="chkBool"></td><td><div class="myViewer rrttll" id="myViewer13"></div></td></tr>
@@ -151,7 +152,13 @@ $( document ).ready(function() {
         viewerColorsBg: [viewerColors.bgGray, viewerColors.bgRed],
         }), 
     "myViewer4": $('#myViewer4').viewMeAsBool({
-        viewerTitle: 'test 4 - blue | red',
+        viewerTitle: 'test 4 - no text',
+        viewerText: ["", ""],
+        viewerColorsBg: [viewerColors.bgGreen, viewerColors.bgRed],
+        }),
+
+    "myViewer5": $('#myViewer5').viewMeAsBool({
+        viewerTitle: 'test 5 - blue | red',
         viewerText: ["COLD", "HOT"],
         viewerColorsBg: [viewerColors.blue, viewerColors.bgRed],
         }),
