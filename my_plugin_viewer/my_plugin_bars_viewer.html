@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+<head>
+
+<title>Bars Viewer 001</title>
+
+<meta charset="UTF-8" >
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="./p_data/js/gauge_2.1.7.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="./p_data/css/style_responsive.css" />
+
+<style>
+
+  .viewerWidget {
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    background-color: #fefefe;
+    color: #444444;
+    margin: 1px;
+ }
+  .viewerWidget.rrttll { 
+    direction: rtl;
+  } 
+  .viewerBar.viewerErr,
+  .viewerWidget.viewerErr { 
+    border: 1px solid rgba(200, 50, 50, .75);
+    background-color: rgba(200, 50, 50, .25);
+  } 
+
+  .viewerTitle { 
+    color: #222222;
+    padding: 2px 5px;
+    padding-bottom: 0;
+    text-align: left;
+  } 
+  .viewerWidget.rrttll .viewerTitle { 
+    text-align: right;
+    font-family: tahoma;
+  } 
+  
+  .viewerWidget canvas { 
+    /* margin-bottom: -40px; */
+  }
+  
+  .viewerHideTicks .viewerLinearGauge canvas { 
+    margin-top: -40px;
+    margin-bottom: -30px;
+    /* border: 1px solid blue; */
+  }
+  .viewerHideTicks.viewerBar canvas,
+  .viewerHideTicks .viewerLinearGauge canvas { 
+    margin-top: -40px;
+    margin-bottom: -40px;
+    /* border: 1px solid blue; */
+  }
+
+
+
+  .viewerBars {
+   } 
+ .viewerBar {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-between;  /* space-around */
+    padding: 5px 10px;
+    /* border: 1px dotted #aaaaaa; */
+    text-align: center;
+  } 
+  .viewerBar {   
+    border-top: 1px dotted #cccccc;
+  }
+  .viewerBar:last-child  {  /* last child of its parent */
+      /* border-bottom: 1px dotted #00eeee; */
+  }
+  .viewerBar.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerBar .viewerVal { 
+    color: #6ec580;
+    font-size: 110%;
+    direction: ltr; /*  allways! */
+    /* border: 1px solid blue; */
+    /* width:50px */ 
+  } 
+  .viewerErr.viewerBar .viewerVal { 
+    color: #de6262;
+  } 
+
+  .viewerBar .viewerText { font-size: 80%; }
+  .viewerBar .viewerDesc { /* border: 1px solid green; */ /* width:70px; */ }
+  .viewerBar .viewerValUnit { padding-left: 2px; }
+
+  
+  .viewerMinMax {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-around;  /* space-between */
+    padding: 0 10px;
+    /* border: 1px solid black; */
+    text-align: center;
+  } 
+  .viewerMinMax.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerMinMax .viewerVal { 
+    color: #6ec580;
+    font-size: 110%;
+  } 
+  .viewerErr .viewerMinMax .viewerVal { 
+    color: #de6262;
+  } 
+
+  .viewerMinMax .viewerText { font-size: 80%; }
+  .viewerMinMax .viewerValUnit { padding-left: 2px; }
+ 
+   table { margin: 20px; background-color: #eeeeee; } 
+   div#content table td { text-align: center; vertical-align: top; }
+  .chk { text-align: center; }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content">
+  <div class="container containerLTR floated" >
+
+    <h1>Bars Viewer</h1>
+	
+<table width="80%" border="0" cellspacing="2" cellpadding="2">
+    
+  <tr><td colspan="2"><div class="viewerWidget" id="myViewer1"></div></td></tr>
+
+  <tr><td>Set Error:</td><td>Set Value:</td></tr>
+
+   <tr><td class="chk" ><input type="checkbox" name="chk1" class="chkErr"></td><td class="chk" ><input type="number" name="num1" id="num1" class="setNum" step="5" ></td></tr>
+   <tr><td class="chk" ><input type="checkbox" name="chk2" class="chkErr"></td><td class="chk" ><input type="number" name="num2" id="num2" class="setNum" step="5" ></td></tr>
+   <tr><td class="chk" ><input type="checkbox" name="chk3" class="chkErr"></td><td class="chk" ><input type="number" name="num3" id="num3" class="setNum" step="5" ></td></tr>
+   <tr><td class="chk" ><input type="checkbox" name="chk4" class="chkErr"></td><td class="chk" ><input type="number" name="num4" id="num4" class="setNum" step="5" ></td></tr>
+   
+  <tr><td colspan="2"><div class="viewerWidget rrttll" id="myViewer11"></div></td></tr>
+ 
+  </table>
+  </div>
+  </div>
+
+<script>
+
+class viewMeColors {
+  constructor(){
+    this.colBgRed = "#de6262";
+    this.colBgGreen = "#6ec580";
+    this.colBgGray = "#CECECE";
+    this.colFgTxt = "#333333";
+    this.colBlue = "#63A9DD";
+  }
+    
+  get bgRed() { return this.colBgRed; }
+  get bgGreen() { return this.colBgGreen; }
+  get bgGray() { return this.colBgGray; }
+  get fgTxt() { return this.colFgTxt; }
+  get blue() { return this.colBlue; }
+} // class viewMeColors 
+
+(function($){
+
+$.fn.viewMeAsBars = function (options) {
+
+  // dbg // console.log("viewMeAsBars!"); // dbg // 
+  var viewerColors = new viewMeColors();
+
+  var colorBarProgressDefault = "rgba(50,200,50,.75)"; // green
+  var colorBarDefault = "rgba(200,200,200,.75)";
+
+  var colorTicksNone = "transparent";
+	  
+
+  var defaults = {
+      viewerTitle: "",
+      // viewerColorsBg: [viewerColors.bgGray],
+      // viewerColorsFg: [viewerColors.fgTxt],
+
+      isErr: false,
+      isHideVal: false,
+	  	  
+	  // numOfDecimals: 1, // == valueDec
+
+    width: 300,
+    height: 100,
+    //units: "Km/h",
+	units: "%", // strDeg, // "Km/h"
+    minValue: 0,
+    maxValue: 100,
+
+	// value: 150,
+    valueInt: 3, 
+    valueDec: 1, 
+
+    valueBox: true,
+    valueBoxStroke: 0,
+    colorValueBoxShadow: 0,
+    valueBoxBorderRadius: 0,
+    valueTextShadow: 0,
+    colorValueBoxBackground: "transparent",
+	fontValueSize: 45,
+	
+	fontNumbers: "Verdana",
+	fontValue: "Verdana",
+
+	colorMinorTicks: "#cccccc",
+	colorMajorTicks: "#cccccc",
+
+    strokeTicks: 0,  // ticks line width. 0 - hidden.
+    isHideTicks: false,
+
+    highlights: [],
+    highlightsWidth: 5,
+	colorPlate: "transparent",
+    borderShadowWidth: 0,
+    borders: false,
+ 
+    // radial // startAngle: 70,
+    // radial // ticksAngle: 220,
+
+	// needle: false,
+    needleType: "line", // "line"
+    needleWidth: 2,
+    // radial // needleStart: 6,
+    // radial // needleCircleSize: 4,
+    // radial // needleCircleInner: false,
+    // radial // colorNeedleCircleOuter: "#aaa",
+    // radial // colorNeedleCircleOuterEnd: "#aaa",
+    colorNeedle: "#888",
+    colorNeedleEnd: "#888",
+
+    barBeginCircle: false,
+    barStrokeWidth: 1,           // bar border width
+    colorBarStroke: "#dddddd",  // usefull when bg is not white
+    barWidth: 15,
+    barShadow: 3,
+    colorBar: colorBarDefault,
+    colorBarProgress: colorBarProgressDefault,
+ 
+    tickSide: "left",
+    numberSide: "left",
+    needleSide: "left",
+
+    animationDuration: 500,
+    animationRule: "linear"	  
+  };
+  var settings = $.extend(defaults, options);
+  var $this = this;
+    
+  if (this.length > 1) {                                       // support multiple elements
+      this.each(function() { $(this).viewMeAsBars(options) });
+      return this;
+  }
+
+
+  // public methods:
+  var gaugeN = new Array (settings.arr.length);;
+
+  this.init = function() {
+
+    $this.append("<div class='viewerTitle'>" + settings.viewerTitle + "</div>");
+
+    var strAll = "", strBar;
+    var arr = settings.arr;
+    var item, idCanvas, vCanvas, settingsG, canvasData;
+    // it takes time to append canvas and calculate its parametersm.
+    // try to not insert all <canvas>s at once
+    for (var i = 0; i < arr.length; i++) {
+      item = arr[i];
+      idCanvas = item.id + "_c"; // "c" + "_" + item.id; // $this.attr('id');
+      
+      canvasData = " data-type='linear-gauge' ";
+      canvasData += " data-width='" + settings.width + "' ";
+      canvasData += " data-height='" + settings.height + "' ";
+      
+      vCanvas = "<canvas id='" + idCanvas + "' "  + canvasData + " >" + "</canvas>";
+      // strBar = "<div class='viewerBar' id='" + item.id + "'><span class='viewerDesc'>" + item.desc + "</span>" + vCanvas + "<span class='viewerVal'><span class='viewerValNum'>" + "</span>" + "<span class='viewerValUnit'>" + item.units + "</span></span>" + "</div>";
+      $this.append(strBar);
+
+      strAll = strAll + "<div class='viewerBar viewerHideTicks' id='" + item.id + "' ><span class='viewerDesc'>" + item.desc + "</span>" + vCanvas + "<span class='viewerVal'><span class='viewerValNum'>" + "</span>" + "<span class='viewerValUnit'>" + item.units + "</span></span>" + "</div>";
+    }
+    $this.append("<div class='viewerBars'>" + strAll + "</div>");
+    // console.log(strAll);
+    // console.log(arr);
+    // console.log($this);
+	
+    // dbg // console.log(settings);
+
+    for (var i = 0; i < arr.length; i++) { /* */
+      item = arr[i];
+      item.i = i;
+      idCanvas = item.id + "_c"; // "c" + "_" + item.id; // $this.attr('id');
+
+
+  // // var l=i.renderTo.tagName?i.renderTo:document.getElementById(i.renderTo);
+  // var l= document.getElementById(idCanvas);
+  // if(!(l instanceof HTMLCanvasElement))throw TypeError("Given my.idCanvas gauge canvas element is invalid!" + idCanvas);
+
+      settingsG = $.extend(settings, { renderTo: idCanvas});
+
+      settingsG.colorUnits = colorTicksNone;
+      settingsG.colorMajorTicks = colorTicksNone;
+      settingsG.colorMinorTicks = colorTicksNone;
+      settingsG.colorNumbers = colorTicksNone;
+      settingsG.colorNeedle = colorTicksNone;
+      // $this.addClass("viewerHideTicks");
+
+      gaugeN[i] = new LinearGauge(settingsG).draw();
+
+   } 
+
+	if (settings.isHideVal) {
+      $this.find(".viewerVal").hide();
+	}
+
+    // $this.setVal(0);
+    // $this.setErr(settings.isErr);
+
+    return this;
+  };
+
+
+  this.setVal = function(id, newVal) {
+  
+    let item = settings.arr.find(a=>a.id == id);
+    let valDec = (item && (typeof item.valueDec !== "undefined")) ? item.valueDec : settings.valueDec;
+
+    $this.find("#" + id).find(".viewerValNum").text(newVal.toFixed(valDec));
+
+	// dbg // console.log(item);
+
+    gaugeN[item.i].value = newVal;
+
+	
+    var hArr = gaugeN[item.i].options.highlights;
+    if (hArr.length > 0) {
+      var hItem;
+      var hCol = colorBarProgressDefault;
+
+      for (var j=0; j< hArr.length; j++) {
+        hItem = hArr[j];
+        if ((newVal >= hItem.from) && (newVal <= hItem.to)) {
+          //console.log(hItem.color);
+          hCol = hItem.color;
+        }
+      }
+      // console.log(colorBarDefault);
+      // console.log(hCol);
+      gaugeN[item.i].update({
+         colorBarProgress: hCol // "rgba(250,250,50,.75)",
+      });
+    } 
+  } 
+  
+  this.setErr = function(id, newErrVal) {
+    if (newErrVal) {
+      $this.find("#" + id).addClass("viewerErr");
+	} else {
+      $this.find("#" + id).removeClass("viewerErr");
+	}
+  } 
+
+
+  return this.init();	
+} // $.fn.viewMeAsBars
+})(jQuery);
+
+
+
+$( document ).ready(function() {
+
+  var viewerColors = new viewMeColors();
+  var strDeg = String.fromCharCode(176) + "C";
+  var strDegF = String.fromCharCode(176) + "F";
+  var strM3H = "m³/H";
+
+  var arr = [
+    {id: "id1", desc: "var 11", units: strDeg, valueDec: 0, minValue: 0, maxValue: 100}, 
+	{id: "id2", desc: "var 222", units: strDegF, valueDec: 1, minValue: -50, maxValue: 150}, 
+	{id: "id3", desc: "var 33 33", units: strM3H, valueDec: 2},
+	{id: "id4", desc: "var 4444", units: "", valueDec: 0, minValue: 0, maxValue: 100}, 
+	{id: "id5", desc: "var 55", units: "", minValue: 0, maxValue: 100} 
+	];
+  var arrHE = [
+    {id: "id11", desc: "ניסיון 11", units: strDegF, valueDec: 0, minValue: 0, maxValue: 100}, 
+	{id: "id12", desc: "ניסיון 222", units: strDeg, valueDec: 1, minValue: 0, maxValue: 100}, 
+	{id: "id13", desc: "ניסיון 33 33", units: strM3H, valueDec: 2, minValue: 0, maxValue: 100}
+	];
+ 
+	
+  var myViewers = {
+ 
+    "myViewer1": $('#myViewer1').viewMeAsBars({
+        viewerTitle: 'test 1',
+        arr: arr,
+
+		highlights: [ 
+		{ "from": 10, "to": 30, "color": "rgba(50, 200, 50, .75)" },   // green
+		{ "from": 40, "to": 65, "color": "rgba(250, 250, 50, .75)" }, // yellow
+		{ "from": 70, "to": 90, "color": "rgba(200, 50, 50, .75)" } ], // red
+
+		isHideVal: true
+       }), 
+   
+    "myViewer11": $('#myViewer11').viewMeAsBars({
+        lang: "HE",
+        viewerTitle: 'ניסיון 1',
+        arr: arrHE,
+        colorBarProgress:viewerColors.blue,		
+        }),
+/* */	
+   };
+
+
+
+    $('.setNum').change(function() {
+        let newVal = $(this).val(); newVal = parseInt(newVal, 10);
+        let id = $(this).attr("name").substr(3); // "numN" -> "N"
+        // myViewers["myViewer" + id].setVal(newVal);
+        myViewers["myViewer1"].setVal("id" + id, newVal);
+    });
+
+
+
+    $('.chkErr').change(function() {
+        let newVal = ($(this).is(':checked')) ? true : false;
+        let id = $(this).attr("name").substr(3); // "chkN" -> "N"
+        // myViewers["myViewer" + id].setErr(newVal);
+        myViewers["myViewer1"].setErr("id" + id, newVal);
+    });
+
+
+   myViewers["myViewer1"].setVal("id1", 60);  $("#num1").val(60);
+   myViewers["myViewer1"].setVal("id2", 70);  $("#num2").val(70);
+   myViewers["myViewer1"].setVal("id3", 80);  $("#num3").val(80);
+   myViewers["myViewer1"].setVal("id4", 40);  $("#num4").val(40);
+   myViewers["myViewer1"].setVal("id5", 50);  // $("#num5").val(50);
+   
+   // myViewers["myViewer1"].setErr("id3", true);
+	  
+   myViewers["myViewer11"].setVal("id11", 10);
+   myViewers["myViewer11"].setVal("id12", 20);
+   myViewers["myViewer11"].setVal("id13", 30);
+   
+   // myViewers["myViewer11"].setErr("id13", true);
+	   
+});
+</script>
+
+</body>
+</html>
