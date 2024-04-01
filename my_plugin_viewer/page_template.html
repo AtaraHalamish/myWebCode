@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>Responsive Grid with Header, Footer, Sidebar, and Body</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+  body, html, ul {
+    margin: 0;
+    padding: 0;
+    font-family: verdana, Arial, sans-serif;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-areas:
+      "header header header header"
+      "sidebar body body body"
+      "sidebar body body body"
+      "footer footer footer footer";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 200px 1fr 1fr 1fr;
+    min-height: 100vh;
+  }
+  
+  header {
+    grid-area: header;
+    background-color: #ffffff;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    /* border-radius: 0 0 5px 5px; */
+	min-height: 60px;
+	text-align: center;
+ 
+     border-top: 2px solid pink;
+     border-bottom: 4px solid pink;
+
+    display: grid;  /* grid container */
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  header.header2cells { grid-template-columns: 1fr 1fr; }
+  header.header3cells { grid-template-columns: 1fr 1fr 1fr; }
+  
+  footer {
+    grid-area: footer;
+    background-color: #666666;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+ 
+    display: grid;  /* grid container */
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  aside {
+    grid-area: sidebar;
+    background-color: #f5f5f5;
+	border-right: 1px solid #cccccc;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  main {
+    grid-area: body;
+    padding: 20px;
+    transition: width 0.3s ease;
+  }
+
+
+  h1 {
+    font-size: 20px;          
+    background-color: pink;        
+    margin: 0;
+    padding: 5px 0;
+    text-align: center;
+    font-weight: normal;
+	line-height: 40px;
+	border-radius: 5px;
+  }
+
+  .hide-sidebar aside {
+    transform: translateX(-100%);
+  }
+
+  .hide-sidebar main {
+    grid-column: 1 / span 4;
+  }
+
+  button.btnToggleSidebar {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    background-color: #f0f0f0;
+    color: #666666;
+    /* border: none; */
+	border-style: hidden;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+    padding: 8px;
+	padding-top: 0px;
+    cursor: pointer;
+	font-size: 40px;
+	line-height: 36px;
+  }
+  button.btnToggleSidebar:hover {
+    background-color: pink;
+  }
+
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /* aside nav                                                             */
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.navMain {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid #dddddd;
+}
+
+.navMain .navSub {
+  list-style-type: none;
+  padding: 0;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.navMain li {
+  background-color: #f7f7f7;
+  padding: 10px;
+  padding-left: 20px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #eeeeee;
+  /* border-top: none; */
+  text-align: left;
+  font-size: 15px;
+  display: flex;
+}
+.navMain li:hover {
+  background-color: pink;
+}
+.navMain li.linksMenuActive:hover {
+  background-color: #f7f7f7; /* parent node, not clickable, keep the original colors */
+}
+
+.navMain li a {
+  /* border: 1px solid #ee0000; */
+  text-decoration: none;
+  color: #444444;
+  flex: 1; /* make the link fill out all available space */
+}
+
+.navMain li.liSub {
+  padding-left: 35px;
+  display: none;
+}
+.navMain li.liSub.liShow {
+  display: flex;
+}
+.navMain li.liSub.liShow.linksMenuActive {
+  background-color: #ffffff;
+  color: red;
+}
+
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /* sidebar styling                                                    */
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+  .tdSite, 
+  .tdUser {
+    text-align: left;
+	margin-top: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+  }
+
+  .tdSite {
+   font-size: 100%;
+   font-weight: normal;
+  }
+
+  .tdUser {
+   border-top: 1px solid #dddddd;
+   font-size: 12px;
+  }
+  
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /* header styling                                                    */
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  
+  header div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+	/* border: 1px solid red; */
+  }
+
+  header div.imgL a,
+  header div.imgL img {
+    margin-right: auto; /* Align left */
+	/* padding-top: 30px; */  /* distinct, according to logo height */
+  }
+
+  header div.imgR img {
+    margin-left: auto; /* Align right */
+  }
+  
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /* footer styling                                                    */
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  
+
+  .footer-vers {
+    padding-left: 10px;
+    text-align: left;
+  }
+
+
+  .footer-date {
+    padding-right: 10px;
+    text-align: right;
+  }
+
+  footer a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /* Responsive styling                                                    */
+  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  
+/*  @media (max-width: 768px) { */
+@media only screen and (max-width: 767px) {
+    .grid-container {
+      grid-template-areas:
+        "header header header header"
+        "sidebar sidebar body body"
+        "sidebar sidebar body body"
+        "footer footer footer footer";
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto 1fr auto;
+    }
+  }
+  
+@media only screen and (max-width: 479px) {
+    header.header2cells { grid-template-columns: 1fr; }
+    header.header3cells { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+    header div.imgL a,
+    header div.imgL img {
+    padding-top: 0;  
+  }
+}
+</style>
+</head>
+<body>
+
+
+<div class="grid-container">
+  <header class="header2cells" >
+    <div class="imgL"><a href="http://www.dixell.co.il" target="_blank"><img src="./p_data/images/logo_dixell_bg_white.gif" alt="Logo"></a> </div>
+	<!-- <div class="imgC"><img src="./p_data/images/logo1.gif" alt="Logo"> </div> --><!--  distinct, header2cells|header3cells -->
+	<div class="imgR"><img src="./p_data/images/logo_2.png" alt="Logo" style="width:156px"></div>
+  </header>
+  
+  <aside>
+    <h2 class="tdSite" id="cSiteName" >Site Name</h2>
+    <div class="tdUser">
+      &#128100; User: <b><span id='user' >xYz</span></b>
+      <br />
+      <!-- <a id='loginLink' href='/index.html'>Login</a> -->
+      <a id='logoutLink' href='#' onclick='LogoutEn(); return false;'>Logout</a>
+	</div>
+    <ul class="navMain">
+      <li id="cm1" ><a href="#" >Home</a></li> <!-- /index_main.html -->
+      <li id="cm2" > <a href="#" >Analog</a> </li>
+          <li class="liSub" id="cm2_1" ><a href="#" >View</a></li>
+          <li class="liSub" id="cm2_2" ><a href="#" >Config</a></li>
+          <li class="liSub" id="cm2_3" ><a href="#" >Alarms</a></li>
+      <li id="cm3" class="linksMenuActive">  Digital  </li>
+          <li class="liSub liShow" id="cm3_1" ><a href="#" >View</a></li>
+          <li class="liSub liShow linksMenuActive" id="cm3_2" >Config</li>  <!-- <a href="#" >Config</a> -->
+          <li class="liSub liShow" id="cm3_3" ><a href="#" >Alarms</a></li>
+      <li id="cm4" >Settings</li>
+      <li id="cm5" >History</li>  <!-- /log/log.html -->
+    </ul>
+  </aside>
+  
+  <main>
+    <button id="btnToggleSidebar" class="btnToggleSidebar" >&#8803;</button> <!-- ≡ -->
+    <h1>Body</h1>
+    <p>This is the main content area.</p>
+  </main>
+  
+  <footer>
+    <div class="footer-vers">
+	  <a href="/panel/index.html"><span id="appRelease">appRelease</span></a>
+	</div>
+    <div class="footer-date">
+	  <span id="strHoliday" >strHoliday</span>
+	  <span id="my_ipro_date">date  time</span> 
+	  <span id="dayInWeek">day</span></div></div>
+  </footer>
+</div>
+
+<script>
+  // document.getElementById("btnToggleSidebar").addEventListener("click", function() {
+  //   document.querySelector(".grid-container").classList.toggle("hide-sidebar");
+  // });
+ /* 
+  var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+*/
+  
+$(document).ready(function(){
+  
+  $('#btnToggleSidebar').click(function(){
+    $(".grid-container").toggleClass("hide-sidebar");
+  });
+	
+
+	
+});
+</script>
+
+</body>
+</html>
