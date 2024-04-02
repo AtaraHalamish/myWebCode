@@ -17,15 +17,14 @@
     font-family: verdana, Arial, sans-serif;
   }
   
-  .grid-container {
+  .grid-container-root {
     display: grid;
     grid-template-areas:
-      "header header header header"
-      "sidebar body body body"
-      "sidebar body body body"
-      "footer footer footer footer";
+      "header header"
+      "sidebar content"
+      "footer footer";
     grid-template-rows: auto 1fr auto;
-    grid-template-columns: 200px 1fr 1fr 1fr;
+    grid-template-columns: 200px 1fr;
     min-height: 100vh;
   }
   
@@ -71,7 +70,7 @@
   }
   
   main {
-    grid-area: body;
+    grid-area: content;
     padding: 20px;
     transition: width 0.3s ease;
   }
@@ -93,7 +92,7 @@
   }
 
   .hide-sidebar main {
-    grid-column: 1 / span 4;
+    grid-column: 1 / span 2;
   }
 
   button.btnToggleSidebar {
@@ -236,6 +235,10 @@
     text-align: right;
   }
 
+  .footer-date div {
+    display: inline;
+  }
+
   footer a {
     color: #ffffff;
     text-decoration: none;
@@ -247,15 +250,15 @@
   
 /*  @media (max-width: 768px) { */
 @media only screen and (max-width: 767px) {
-    .grid-container {
+    /* .grid-container {
       grid-template-areas:
         "header header header header"
-        "sidebar sidebar body body"
-        "sidebar sidebar body body"
+        "sidebar sidebar content content"
+        "sidebar sidebar content content"
         "footer footer footer footer";
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto 1fr auto;
-    }
+    } */
   }
   
 @media only screen and (max-width: 479px) {
@@ -264,19 +267,22 @@
     footer { grid-template-columns: 1fr; }
     header div.imgL a,
     header div.imgL img {
-    padding-top: 0;  
-  }
+      padding-top: 0;  
+    }
+
+    .footer-date div { display: block; }
+
 }
 </style>
 </head>
 <body>
 
 
-<div class="grid-container">
+<div class="grid-container-root hide-sidebar">
   <header class="header2cells" >
     <div class="imgL"><a href="http://www.dixell.co.il" target="_blank"><img src="./p_data/images/logo_dixell_bg_white.gif" alt="Logo"></a> </div>
 	<!-- <div class="imgC"><img src="./p_data/images/logo1.gif" alt="Logo"> </div> --><!--  distinct, header2cells|header3cells -->
-	<div class="imgR"><img src="./p_data/images/logo_2.png" alt="Logo" style="width:156px"></div>
+	<div class="imgR"><img src="./p_data/images/logo_2miko.png" alt="Logo" style="width:156px"></div>
   </header>
   
   <aside>
@@ -304,7 +310,7 @@
   
   <main>
     <button id="btnToggleSidebar" class="btnToggleSidebar" >&#8803;</button> <!-- ≡ -->
-    <h1>Body</h1>
+    <h1>Content</h1>
     <p>This is the main content area.</p>
   </main>
   
@@ -313,9 +319,10 @@
 	  <a href="/panel/index.html"><span id="appRelease">appRelease</span></a>
 	</div>
     <div class="footer-date">
-	  <span id="strHoliday" >strHoliday</span>
-	  <span id="my_ipro_date">date  time</span> 
-	  <span id="dayInWeek">day</span></div></div>
+	  <div id="strHoliday" >strHoliday</div>
+	  <div id="my_ipro_date">date  time</div> 
+	  <div id="dayInWeek">day</div>
+	</div>
   </footer>
 </div>
 
@@ -343,7 +350,7 @@ for (i = 0; i < dropdown.length; i++) {
 $(document).ready(function(){
   
   $('#btnToggleSidebar').click(function(){
-    $(".grid-container").toggleClass("hide-sidebar");
+    $(".grid-container-root").toggleClass("hide-sidebar");
   });
 	
 
