@@ -1,0 +1,110 @@
+/*
+// ------------------------------------------
+// style.css - Apr-2024 , Widgets
+// Copyright (c) Thermoline
+// http://www.thermoline.co.il
+// ------------------------------------------
+*/
+
+/*
+// ------------------------------------------
+// Base
+// ------------------------------------------
+*/
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,
+big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,
+ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,
+details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+	  margin:0; padding:0; border:0; font-size:100%; font:inherit; vertical-align:baseline; }
+	  
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {display:block; }
+
+body { font-size:13px;line-height:21px;color:#666; font-family: verdana, Arial, sans-serif; }
+hr { border:solid #ddd; border-width:1px 0 0; clear:both; margin:10px 0 30px; height:0; }
+a,a:visited { color:#169fe6; text-decoration:none; }
+a:hover,a:focus{color:#888; text-decoration:underline;}
+
+/*
+// ------------------------------------------
+// Widgets
+// ------------------------------------------
+*/
+
+  .viewerWidget {
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    background-color: #fefefe;
+    color: #444444;
+    margin: 1px;
+ }
+  .viewerWidget.rrttll { 
+    direction: rtl;
+  } 
+  .viewerWidget.viewerErr { 
+    border: 1px solid rgba(200, 50, 50, .75);
+    background-color: rgba(200, 50, 50, .25);
+  } 
+
+  .viewerTitle { 
+    color: #222222;
+    padding: 2px 5px;
+    padding-bottom: 0;
+    text-align: left;
+  } 
+  .viewerWidget.rrttll .viewerTitle { 
+    text-align: right;
+    font-family: tahoma;
+  } 
+  
+  .viewerWidget canvas { 
+    margin-bottom: -40px;
+  }
+
+
+  
+  .viewerMinMax {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-around;  /* space-between */
+    padding: 0 10px;
+    /* border: 1px solid black; */
+    text-align: center;
+  } 
+  .viewerMinMax.viewerDisabled { 
+    color: #666666;
+  } 
+  .viewerMinMax .viewerVal { 
+    color: #6ec580;
+    font-size: 110%;
+  } 
+  .viewerErr .viewerMinMax .viewerVal { 
+    color: #de6262;
+  } 
+
+  .viewerMinMax .viewerText { font-size: 80%; }
+  .viewerMinMax .viewerValUnit { padding-left: 2px; }
+ 
+
+  .viewerBool {
+    display: flex;  /* flex-container https://www.w3schools.com/css/css3_flexbox.asp */
+    justify-content: space-between;
+    padding: 5px 10px;
+    margin: 1px;
+    border-radius: 5px;
+    /* border: 1px solid black; */
+    color: #333333;
+  } 
+  .viewerBool.rrttll { direction: rtl; } 
+   /*  font-family: tahoma; */
+ .viewerBool.viewerDisabled { /* todo: use classes for txt colors */
+    color: #666666;
+  } 
+
+  .viewerBool .viewerText { }
+  .viewerBool .viewerVal { }
+
+
+
+/*
+// ------------------------------------------
+*/
