@@ -713,12 +713,12 @@ function LogoutEn() { // works coupled with the function LogoutRedirect() that m
 
 	/* logout for the current user */
 	// !! // magcheck_logout();
-	/* clean up the login cookie if still exists */
-	if (readCookie("dixe_pass") != null) {
-		eraseCookie("dixe_pass");
-		dixe_forget();
-	}
-	/* redirect to the homepage/login page */
+	// !! // /* clean up the login cookie if still exists */
+	// !! // if (readCookie("dixe_pass") != null) {
+	// !! // 	eraseCookie("dixe_pass");
+	// !! // 	dixe_forget();
+	// !! // }
+	// !! // /* redirect to the homepage/login page */
 	// !! // window.location.replace("/index.html");
 }
 
