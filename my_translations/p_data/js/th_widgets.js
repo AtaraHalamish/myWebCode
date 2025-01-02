@@ -1037,7 +1037,7 @@ Language dropdown based on flags from
   //  // h += "<!-- <div class='imgR'><img src='/p_data/images/logo2.png' alt='Logo' style='width:156px'></div> -->";
 
   var btnToggle = "<button id='btnToggleSidebar' class='btnToggleSidebar' >&#8803;</button>"; // <!-- ≡ -->
-  var logo1 = "<img src='/p_data/images/logo_miko.png' alt='Logo' style='width: 156px; ' />";
+  var logo1 = "[My Logo]"; // "<img src='/p_data/images/logo_miko.png' alt='Logo' style='width: 156px; ' />";
 
   // var user = "";
   // user += "<div class='tdUser'>";
@@ -1378,7 +1378,8 @@ function tmplUpdateData(obj) {
   function templateTranslateTo(langId) {
     // note: This function does not work with local files, only with web files from the same origin.
 
-    $.getJSON('/p_data/i18n/lang_' + langId + '.json', function(result) {
+    // $.getJSON('/p_data/i18n/lang_' + langId + '.json', function(result) {
+    $.getJSON('../p_data/i18n/lang_' + langId + '.json', function(result) {
       $('[data-i18n]').each(function() { // $('.txt').each(function() {
         var key = $(this).data('i18n'); // attribute data-i18n.value
         if (result[key]) {
