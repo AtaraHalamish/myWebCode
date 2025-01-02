@@ -1,0 +1,122 @@
+{
+    "test_hello": "שלום",
+    "test_welcome": "ברוכים הבאים",
+    "test_goodbye": "להתראות",
+	
+	"login_user": "משתמש:",
+	"login_pass": "סיסמא:",
+	"login_btnEnter": "כניסה",
+	
+	"header_user": "משתמש",
+	"header_login": "התחבר",
+	"header_logout": "התנתק",
+	
+	"dayInWeek_0": "יום ראשון",
+	"dayInWeek_1": "יום שני",
+	"dayInWeek_2": "יום שלישי",
+	"dayInWeek_3": "יום רביעי",
+	"dayInWeek_4": "יום חמישי",
+	"dayInWeek_5": "יום שישי",
+	"dayInWeek_6": "שבת",
+
+
+	"__sidebar_short_titles__": "_______________________________________________________",
+	
+	"cm1_sm0_Dashboard": "דף בית",	
+
+	"cm2_sm0_Analog": "כניסות אנלוגיות",   
+	"cm2_sm1_View": "תצוגה",
+	"cm2_sm2_Config": "קונפיגורציה",
+	"cm2_sm3_Calib": "כיול", 
+	"cm2_sm4_Alarms": "תקלות",   
+
+	"cm3_sm0_Digital": "כניסות דיגיטליות",  
+	"cm3_sm1_View": "תצוגה",
+	"cm3_sm2_Config": "קונפיגורציה",
+	"cm3_sm3_Alarms": "תקלות",  
+
+	"cm4_sm0_Settings": "הגדרות",
+	"cm4_sm1_General": "כללי",
+	"cm4_sm2_Email": "אימייל",
+	"cm4_sm3_Backup": "גיבוי",
+	"cm4_sm4_Restore": "שיחזור",
+
+	"cm5_sm0_History": "היסטוריה",
+	"cm5_sm1_Tanks": "רמת מיכלים",
+	"cm5_sm2_Using": "שימוש במיכלים",
+	"cm5_sm3_Filling": "מילוי מיכלים",
+
+	"cm6_sm0_Analyse": "בדיקות", 
+
+	"__page_long_titles__": "_______________________________________________________",
+	
+	"cm1_sm0_h1_Dashboard": "דף בית",	
+
+	"cm2_sm1_h1_View": "כניסות אנלוגיות",
+	"cm2_sm2_h1_Config": "כניסות אנלוגיות - קונפיגורציה",
+	"cm2_sm3_h1_Calib": "כניסות אנלוגיות - כיול", 
+	"cm2_sm4_h1_Alarms": "כניסות אנלוגיות - תקלות",   
+
+	"cm3_sm1_h1_View": "כניסות דיגיטליות",
+	"cm3_sm2_h1_Config": "כניסות דיגיטליות - קונפיגורציה",
+	"cm3_sm3_h1_Alarms": "כניסות דיגיטליות - תקלות",  
+
+	"cm4_sm1_h1_General": "הגדרות כלליות",
+	"cm4_sm2_h1_Email": "הגדרות אימייל",
+	"cm4_sm3_h1_Backup": "גיבוי",
+	"cm4_sm4_h1_Restore": "שיחזור",
+
+	"cm5_sm1_h1_Probes": "היסטורית רגשים",
+	"cm5_sm1_h1_Tanks": "היסטורית מיכלים",
+	"cm5_sm2_h1_Using": "היסטורית שימוש במיכלים",
+	"cm5_sm3_h1_Filling": "היסטורית מילוי מיכלים",
+
+	"cm6_sm0_h1_Analyse": "בדיקת מיכלים", 
+
+	"__History__": "_______________________________________________________",
+	
+	"hysDate": "תאריך:",
+	"hysSelectRange" : "בחר טווח להגדלת תצוגה:", 
+	"hysBtnResetZoom": "אתחל תצוגה",
+	"hysBtnPrint": "הדפס",
+	"hysBtnRefresh": "רענן",
+	"hysShowHide": "הצג / הסתר:",
+	"hysDownloadData": "קבצים להורדה:",
+	
+	"hysFileProbes": "רגשים",
+	"hysFileAlarms": "תקלות",
+	"hysFileTanks": "מיכלים",
+	"hysFileMonthlyReport": "דוח חודשי",
+	
+	"hysFileAlarmsFull": "הורדת קובץ היסטורית תקלות",
+
+	"__Backup__": "_______________________________________________________",
+	
+	"h2_BackupManual": "גיבוי חד פעמי",
+	"h2_BackupAuto": "גיבוי אוטומטי",
+	"h2_BackupHistory": "היסטורית גיבויים",
+	
+	"h_BackupSystem": "גיבוי מערכת:",
+	"h_BackupBtn": "גיבוי",
+	"h_BackupEnableDayly": "קבע גיבוי יומי בחצות הלילה (24:00):",
+	"h_BackupLast": "גיבוי אחרון:",
+	"h_BackupLastResult": "תוצאות גיבוי אחרון:",
+	"h_BackupViewAll": "הצג את כל היסטורית הגיבויים:",
+	"h_BackupDownload": "הורד קובץ",
+	
+
+	"__Restore__": "_______________________________________________________",
+	
+	"h2_RestoreManual": "שיחזור חד פעמי",
+	"h2_RestoreHistory": "היסטורית שיחזורים",
+	
+	"h_RestoreSystem": "שיחזור מערכת מגירסת הגיבוי האחרונה:",
+	"h_RestoreBtn": "שחזר",
+	"h_RestoreLast": "שיחזור אחרון:",
+	"h_RestoreLastResult": "תוצאת שיחזור אחרון:",
+	"h_RestoreViewAll": "הצג את כל היסטורית השיחזורים:",
+	"h_RestoreDownload": "הורד קובץ",
+
+
+	"last_item_with_no_ending_comma": "..."
+}

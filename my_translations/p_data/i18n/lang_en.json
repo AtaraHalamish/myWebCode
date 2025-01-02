@@ -1,0 +1,122 @@
+{
+	"test_hello": "hello",
+	"test_welcome": "welcome",
+	"test_goodbye": "goodbye",
+	
+	"login_user": "Username:",
+	"login_pass": "Password:",
+	"login_btnEnter": "Login",
+	
+	"header_user": "User",
+	"header_login": "Login",
+	"header_logout": "Logout",
+	
+	"dayInWeek_0": "Sunday",
+	"dayInWeek_1": "Monday",
+	"dayInWeek_2": "Tuesday",
+	"dayInWeek_3": "Wednesday",
+	"dayInWeek_4": "Thursday",
+	"dayInWeek_5": "Friday",
+	"dayInWeek_6": "Saturday",
+
+
+	"__sidebar_short_titles__": "_______________________________________________________",
+	
+	"cm1_sm0_Dashboard": "Dashboard",	
+
+	"cm2_sm0_Analog": "Analog",   
+	"cm2_sm1_View": "View",
+	"cm2_sm2_Config": "Configuration",
+	"cm2_sm3_Calib": "Calibration", 
+	"cm2_sm4_Alarms": "Alarms",   
+
+	"cm3_sm0_Digital": "Digital",  
+	"cm3_sm1_View": "View",
+	"cm3_sm2_Config": "Configuration",
+	"cm3_sm3_Alarms": "Alarms",  
+
+	"cm4_sm0_Settings": "Settings",
+	"cm4_sm1_General": "General",
+	"cm4_sm2_Email": "Email",
+	"cm4_sm3_Backup": "Backup",
+	"cm4_sm4_Restore": "Restore",
+
+	"cm5_sm0_History": "History",
+	"cm5_sm1_Tanks": "Tanks",
+	"cm5_sm2_Using": "Tanks Using",
+	"cm5_sm3_Filling": "Tanks Filling",
+
+	"cm6_sm0_Analyse": "Analyse", 
+
+	"__page_long_titles__": "_______________________________________________________",
+	
+	"cm1_sm0_h1_Dashboard": "Dashboard",	
+
+	"cm2_sm1_h1_View": "View Analog Probes",
+	"cm2_sm2_h1_Config": "Analog Probes Configuration",
+	"cm2_sm3_h1_Calib": "Analog Probes Calibration", 
+	"cm2_sm4_h1_Alarms": "Analog Probes Alarms",   
+
+	"cm3_sm1_h1_View": "View Digital Inputs",
+	"cm3_sm2_h1_Config": "Digital Inputs Configuration",
+	"cm3_sm3_h1_Alarms": "Digital Inputs Alarms",  
+
+	"cm4_sm1_h1_General": "General Settings",
+	"cm4_sm2_h1_Email": "Email Settings",
+	"cm4_sm3_h1_Backup": "Backup",
+	"cm4_sm4_h1_Restore": "Restore",
+
+	"cm5_sm1_h1_Probes": "Probes History",
+	"cm5_sm1_h1_Tanks": "Tanks History",
+	"cm5_sm2_h1_Using": "Tanks Using",
+	"cm5_sm3_h1_Filling": "Tanks Filling",
+
+	"cm6_sm0_h1_Analyse": "Check Tanks", 
+
+	"__History__": "_______________________________________________________",
+	
+	"hysDate": "Date:",
+	"hysSelectRange" : "Select range to zoom-in:", 
+	"hysBtnResetZoom": "Reset Zoom",
+	"hysBtnPrint": "Print",
+	"hysBtnRefresh": "Refresh",
+	"hysShowHide": "Show \\ Hide:",
+	"hysDownloadData": "Download Data:",
+	
+	"hysFileProbes": "Download Probes",
+	"hysFileAlarms": "Download Alarms",
+	"hysFileTanks": "Download Tanks",
+	"hysFileMonthlyReport": "Download Monthly Report",
+	
+	"hysFileAlarmsFull": "Download Alarms History File",
+
+	"__Backup__": "_______________________________________________________",
+	
+	"h2_BackupManual": "Manual Backup",
+	"h2_BackupAuto": "Automatic Backup",
+	"h2_BackupHistory": "Backup History",
+	
+	"h_BackupSystem": "Backup system:",
+	"h_BackupBtn": "Backup",
+	"h_BackupEnableDayly": "Enable daily backup at 24:00 (midnight):",
+	"h_BackupLast": "Last backup:",
+	"h_BackupLastResult": "Last backup result:",
+	"h_BackupViewAll": "View all backups history:",
+	"h_BackupDownload": "Download File",
+	
+
+	"__Restore__": "_______________________________________________________",
+	
+	"h2_RestoreManual": "Manual Restore",
+	"h2_RestoreHistory": "Restore History",
+	
+	"h_RestoreSystem": "Restore system from the last backup version:",
+	"h_RestoreBtn": "Restore",
+	"h_RestoreLast": "Last restore:",
+	"h_RestoreLastResult": "Last restore result:",
+	"h_RestoreViewAll": "View all restore history:",
+	"h_RestoreDownload": "Download File",
+	
+
+	"last_item_with_no_ending_comma": "..."
+}

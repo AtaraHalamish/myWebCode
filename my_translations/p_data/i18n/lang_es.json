@@ -1,0 +1,12 @@
+{
+    "hello": "Hola",
+    "welcome": "Bienvenido",
+    "goodbye": "Adiós",
+	
+	"login_user": "Username:",
+	"login_pass": "Password:",
+	"login_btnEnter": "Login",
+	
+	
+	"last_item_with_no_ending_comma": "..."
+}

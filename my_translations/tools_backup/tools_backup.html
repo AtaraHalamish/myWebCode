@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FMS :: Settings - Backup</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="../p_data/images/favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="../p_data/css/th_widgets.css" />
+
+<!-- <script src="../p_data/js/jquery-3.7.1.min.js"></script>  -->
+<!-- <script src="../p_data/js/jquery-ui-1.13.2.min.js"></script>  -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <script src="/javascripts/dixell.js" ></script>   -->
+<!-- <script src="/panel/css/j_utility.js"></script>   -->
+<script src="../p_data/js/th_widgets.js"></script>
+
+  <!-- JMWidget styles -->
+  <!-- <link rel="stylesheet" href="/p_data/css/base/hmi.base.css">        -->
+  <!-- <link rel="stylesheet" href="/p_data/css/hmi.base-allstyles.css">   -->
+
+  <!-- JMWidget classes -->
+  <!-- <script src="/p_data/js/hmi.core.js"></script>               -->
+  <!-- <script src="/p_data/js/hmi.widget.js"></script>             -->
+  <!-- <script src="/p_data/js/hmi.page.js"></script>               -->
+  <!-- <script src="/p_data/js/hmi.txt.js"></script>                -->
+  <!-- <script src="/p_data/js/hmi.numeric_desc.js"></script>       -->
+  <!--                                                              -->
+  <!-- <script src="/p_data/js/jq.hmi.core.js"></script>            -->
+  <!-- <script src="/p_data/js/jq.hmi.widget.js"></script>          -->
+  <!-- <script src="/p_data/js/jq.hmi.page.js"></script>            -->
+  <!-- <script src="/p_data/js/jq.hmi.txt.js"></script>             -->
+  <!-- <script src="/p_data/js/jq.hmi.numeric_desc.js"></script>    -->
+
+<style>
+
+  .rrttll .grid-container-content.grid-container-content-inner.grid-settings-no-titles {
+    direction: rtl;
+  }
+
+  .hmi-txt {
+    font-family: Verdana;
+    font-size: 14px;
+    padding: 2px 5px;
+    text-align: left;
+  }
+
+  .hmi-numeric-desc {
+    font-family: Verdana;
+    font-size: 14px;
+    padding: 2px 5px;
+    text-align: center;
+  }
+  .rrttll .hmi-numeric-desc { font-family: tahoma; }
+
+
+  .flag { width: 40px; }
+  .flag .optVal_0 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #eeeeee; }
+  .flag .optVal_1 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #07ac60; }
+
+  .lastTime { width: 180px; text-align: center; }
+  .lastResult { width: 180px; }
+  .lastResult .optVal_0 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #eeeeee; }
+  .lastResult .optVal_1 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #07ac60; }
+  .lastResult .optVal_2 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #3333ff; color: #3333ff; }
+  .lastResult .optVal_-1 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #ee0000; color: #ee0000; }
+  
+  .viewerString, .viewerBool { /* border: 1px solid var(--colDisabled_txt); */ }
+    
+  .grid-container-content {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(3, auto);      /* Manual, Automatic, History */ 
+
+    padding-bottom: 30px;
+  }
+  .grid-container-content.grid-container-content-inner {
+    display: grid;
+
+    grid-template-columns: minmax(250px, 450px); 
+    grid-template-rows: auto;
+
+    box-shadow: none;
+    padding: 0;
+  }
+
+@media only screen and (max-width: 800px) {
+}
+@media only screen and (max-width: 480px) {
+}
+
+  </style>
+
+</head>
+<body id="page1">
+
+<div class="grid-container-root hide-sidebar llttrr rrttll_by_i18n">
+  <header id="tmplHeader" ></header>  
+  <aside id="tmplSideBar" ></aside>
+    
+  <main id="tmplMain" >
+    <h1 data-i18n="cm4_sm3_h1_Backup" >Backup</h1>
+
+    <div class="grid-container-content">
+
+      <div class="grid-container-content grid-container-content-inner grid-settings-no-titles">
+          <h2 data-i18n="h2_BackupManual" >Manual Backup</h2>
+          <div class="tbl_row tbl_row_with_button"><div class="tempContainer"><div data-i18n="h_BackupSystem" class="wDesc" >Backup system: </div>     
+            <div class="wEdit" >
+              <span class="isamod_boolwrt" id="btn_idParameters1" style="display: none;" >SavePar 1 Backup</span>
+              <span data-i18n="h_BackupBtn" class="myButton" id="idParameters1">Backup</span>
+            </div>
+          </div></div>
+          <div class="tbl_row tbl_row_hidden"><div class="myMsg" id="msg_idParameters1"></div></div>		  
+      </div>
+
+      <div class="grid-container-content grid-container-content-inner grid-settings-no-titles">
+          <h2 data-i18n="h2_BackupAuto" >Automatic Backup</h2>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_BackupEnableDayly" >Enable daily backup at 24:00 (midnight):</div>     <div id="flag" class="wEdit flag" >initializing . . .</div></div></div>
+      </div>
+
+      <div class="grid-container-content grid-container-content-inner grid-settings-no-titles">
+          <h2 data-i18n="h2_BackupHistory" >Backup History</h2>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_BackupLast" >Last backup: </div> <div id="lastTime" class="wEdit lastTime" >initializing . . .</div></div></div>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_BackupLastResult" >Last backup result: </div> <div id="lastResult" class="wEdit lastResult" >initializing . . .</div></div></div>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_BackupViewAll" >View all backups history: </div> <div id="his" class="wEdit his" ><a data-i18n="h_BackupDownload" href="/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt" >Download File</a></div></div></div>		  
+      </div>
+
+    </div>
+
+  </main>
+  
+  <footer id="tmplFooter" ></footer>
+</div>
+
+<script>
+
+$( document ).ready(function() {
+
+  templateStart("m4", "sm3"); // doTemplate("m4", "sm3");
+
+  var myWidgets = {};
+  var viewerColors = new viewMeColors();
+
+  var arrYesNo, arrResult;
+  var selectedLangId = $('body').attr('data-lang-i18n');
+ 
+  switch (selectedLangId){
+    case "IL" : // rtl
+      arrYesNo = [
+        { optVal: 0, optText: "לא" },
+        { optVal: 1, optText: "כן" }];
+      arrResult = [
+        { optVal: -1, optText: "גיבוי נכשל" },
+        { optVal:  0, optText: " - " },
+        { optVal:  1, optText: "גיבוי הושלם בהצלחה" },
+        { optVal:  2, optText: "גיבוי מתבצע כעת" }];
+    break;    
+    default : // ltr
+      arrYesNo = [
+        { optVal: 0, optText: "No" },
+        { optVal: 1, optText: "Yes" }];
+      arrResult = [
+        { optVal: -1, optText: "Backup Failed" },
+        { optVal:  0, optText: " - " },
+        { optVal:  1, optText: "Backup Succeeded" },
+        { optVal:  2, optText: "Backup is Running . . ." }];
+    break;   
+  }
+
+//var arrYesNo = [
+//  { optVal: 0, optText: "No" },
+//  { optVal: 1, optText: "Yes" }];
+
+     // $("#flag").hmiNumericDesc({rw:'rw', dxlVar:'Auto_BACKUP', selOptions: arrYesNo });
+
+//var arrResult = [
+//  { optVal: -1, optText: "Backup Failed" },
+//  { optVal:  0, optText: " - " },
+//  { optVal:  1, optText: "Backup Succeeded" },
+//  { optVal:  2, optText: "Backup is Running . . ." }];
+
+
+  var str_h_BackupSystem = "גיבוי מערכת:";
+  var str_h_BackupBtn = "גיבוי";
+  var str_h_BackupEnableDayly = "קבע גיבוי יומי בחצות הלילה (24:00):";
+  var str_h_BackupLast = "גיבוי אחרון:";
+  var str_h_BackupLastResult = "תוצאות גיבוי אחרון:";
+  var str_h_BackupViewAll = "הצג את כל היסטורית הגיבויים:";
+  var str_h_BackupDownload = "הורד קובץ";
+
+     // $("#lastResult").hmiNumericDesc({rw:'r', dxlVar:'SavePar_Result', selOptions: arrResult });
+     // $("#lastTime").hmiTxt({rw:'r', dxlVar:'Last_Backup' });
+
+    myWidgets["flag"] = $("#flag").editMe({dxlVar: "Auto_BACKUP", valType: "typeDesc", rw: "rw", viewerText: str_h_BackupEnableDayly, desc_viewerVals: arrYesNo, viewerText_i18n_key:"h_BackupEnableDayly" });
+    myWidgets["lastResult"] = $("#lastResult").editMe({dxlVar: "SavePar_Result", valType: "typeDesc", rw: "r", viewerText: str_h_BackupLastResult, desc_viewerVals: arrResult, viewerText_i18n_key:"h_BackupLastResult" });
+
+    myWidgets["lastTime"] = $("#lastTime").editMe({dxlVar: "Last_Backup", valType: "typeTxt", rw: "r", viewerText: str_h_BackupLast, initVal:"lastTimeLastTime", viewerText_i18n_key:"h_BackupLast"});
+
+    var strHtmlLog = "<a data-i18n='h_BackupDownload' href='/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt' >" + str_h_BackupDownload + "</a>";
+    myWidgets["his"] = $("#his").editMe({dxlVar: "", valType: "typeHtml", rw: "r", viewerText: str_h_BackupViewAll, html_val: strHtmlLog, viewerText_i18n_key:"h_BackupViewAll"});
+
+
+    var paramOnce = "";
+    paramOnce += "Auto_BACKUP|";
+    paramOnce += "SavePar_Result|";
+    paramOnce += "Last_Backup|";
+
+    var paramOften = "";
+    paramOften += "SavePar_Result|";
+    paramOften += "Last_Backup|";
+
+    paramOnce = paramOnce.toUpperCase(); getDataOnce(paramOnce, updateData);
+
+    var timer = 1000 * 5;  // 5 seconds
+    paramOften = paramOften.toUpperCase(); getUpdatedData(paramOften, timer, updateData);
+
+
+    $("#idParameters1").click(function() {
+      var objWidgetId = "idParameters1";
+      set_status_msg("msg_" + objWidgetId, "Running backup, Please wait  . . .", 3000);
+      $("#" + "btn_" + objWidgetId).click();
+
+      return false;
+    });
+
+
+    function formatDateTime(strDateTime) {
+      // e.g. "12:55,26/8/2015"
+
+      if (strDateTime.length > 10) {
+        var terms = strDateTime.split(',');
+        var strDate = $.trim(terms[1]);
+        var strTime = $.trim(terms[0]);
+
+        if (strTime.length < 5) {
+          var idx = strTime.indexOf(":", 0);
+          var hh = strTime.substring(0, idx);  if (hh.length < 2) hh = "0" + hh; // "1:00" -> "01:00"
+          var mm = strTime.substring(idx + 1); if (mm.length < 2) mm = "0" + mm; // "01:0" -> "01:00"
+          strTime = hh + ":" + mm;
+        }
+        return strDate + " " + strTime;
+
+      } else {
+        return " - ";
+      }
+
+    }
+
+
+  function updateData(obj) {
+    var varName, varVal, arrName, arrIndex;
+    for(var i = 0; i < obj.values.length; i++) {
+      varName = obj.values[i].name;
+      varVal = obj.values[i].value;
+
+      switch (varName) {
+
+        case "AUTO_BACKUP": updateWidget("flag", parseInt(varVal, 10)); break;
+        case "LAST_BACKUP": updateWidget("lastTime", formatDateTime(varVal[0])); break;  // pass the inner string from the array
+        case "SAVEPAR_RESULT": updateWidget("lastResult", parseInt(varVal, 10)); break;
+
+        default:
+          // dbg // console.log(" * * *  case ??? *" + varName + "* ? ? ? "); // should not get here!
+          break;
+      }  // switch
+    }  // for
+  }
+
+});
+  </script>
+
+</body>
+</html>
