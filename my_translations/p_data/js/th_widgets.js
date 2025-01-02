@@ -712,14 +712,14 @@ function LoginEn() { // login on both user site and control panel
 function LogoutEn() { // works coupled with the function LogoutRedirect() that must be called as Body onunload event.
 
 	/* logout for the current user */
-	magcheck_logout();
+	// !! // magcheck_logout();
 	/* clean up the login cookie if still exists */
 	if (readCookie("dixe_pass") != null) {
 		eraseCookie("dixe_pass");
 		dixe_forget();
 	}
 	/* redirect to the homepage/login page */
-	window.location.replace("/index.html");
+	// !! // window.location.replace("/index.html");
 }
 
 function getUser() { // check which user is logged in. Return the username of the user.
