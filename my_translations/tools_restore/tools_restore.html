@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FMS :: Settings - Restore</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="../p_data/images/favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="../p_data/css/th_widgets.css" />
+
+<!-- <script src="/p_data/js/jquery-3.7.1.min.js"></script>           -->
+<!-- <script src="/p_data/js/jquery-ui-1.13.2.min.js"></script>       -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <script src="/javascripts/dixell.js" ></script>                  -->
+<!-- <script src="/panel/css/j_utility.js"></script>                  -->
+<script src="../p_data/js/th_widgets.js"></script>
+
+<style>
+
+  .rrttll .grid-container-content.grid-container-content-inner.grid-settings-no-titles {
+    direction: rtl;
+  }
+
+  .hmi-txt {
+    font-family: Verdana;
+    font-size: 14px;
+    padding: 2px 5px;
+    text-align: left;
+   }
+  
+  .hmi-numeric-desc {
+    font-family: Verdana;
+    font-size: 14px;
+    padding: 2px 5px;
+    text-align: center;
+  }
+  .rrttll .hmi-numeric-desc { font-family: tahoma; }
+
+   .lastTime { width: 180px; text-align: center; }
+   .lastResult { width: 180px; }
+   .lastResult .optVal_0 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #eeeeee; }
+   .lastResult .optVal_1 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #07ac60; }
+   .lastResult .optVal_2 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #3333ff; color: #3333ff; }
+   .lastResult .optVal_-1 { padding: 1px 5px; background-color: #eeeeee; border: 2px solid #ee0000; color: #ee0000; }
+  
+  .viewerString, .viewerBool { /* border: 1px solid var(--colDisabled_txt); */ }
+    
+  .grid-container-content {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(2, auto);      /* Manual, History */ 
+
+    padding-bottom: 30px;
+  }
+  .grid-container-content.grid-container-content-inner {
+    display: grid;
+
+    grid-template-columns: minmax(250px, 450px); 
+    grid-template-rows: auto;
+
+    box-shadow: none;
+    padding: 0;
+  }
+
+@media only screen and (max-width: 800px) {
+}
+@media only screen and (max-width: 480px) {
+}
+
+  </style>
+
+</head>
+<body id="page1">
+
+<div class="grid-container-root hide-sidebar llttrr rrttll_by_i18n">
+  <header id="tmplHeader" ></header>  
+  <aside id="tmplSideBar" ></aside>
+    
+  <main id="tmplMain" >
+    <h1 data-i18n="cm4_sm4_h1_Restore" >Restore</h1>
+
+    <div class="grid-container-content">
+
+      <div class="grid-container-content grid-container-content-inner grid-settings-no-titles">
+          <h2 data-i18n="h2_RestoreManual" >Manual Restore</h2>
+          <div class="tbl_row tbl_row_with_button"><div class="tempContainer"><div class="wDesc" data-i18n="h_RestoreSystem" >Restore system from the last backup version: </div>     
+            <div class="wEdit" >
+              <span class="isamod_boolwrt" id="btn_idParameters1" style="display: none;" >LoadPar 1 Restore</span>
+              <span data-i18n="h_RestoreBtn" class="myButton" id="idParameters1">Restore</span>
+            </div>
+          </div></div>
+          <div class="tbl_row tbl_row_hidden"><div class="myMsg" id="msg_idParameters1"></div></div>		  
+      </div>
+
+      <div class="grid-container-content grid-container-content-inner grid-settings-no-titles">
+          <h2 data-i18n="h2_RestoreHistory" >Restore History</h2>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_RestoreLast" >Last restore: </div> <div id="lastTime" class="wEdit lastTime" >initializing . . .</div></div></div>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_RestoreLastResult" >Last restore result: </div> <div id="lastResult" class="wEdit lastResult" >initializing . . .</div></div></div>
+          <div class="tbl_row"><div class="tempContainer"><div class="wDesc" data-i18n="h_RestoreViewAll" >View all restore history: </div> <div id="his" class="wEdit his" ><a data-i18n="h_RestoreDownload" href="/cgi-bin/getfile.cgi?log=RESTORE_LOG&what=log&disp=attachment&ext=txt" >Download File</a></div></div></div>		  
+      </div>
+
+    </div>
+
+  </main>
+  
+  <footer id="tmplFooter" ></footer>
+</div>
+
+<script>
+
+$( document ).ready(function() {
+
+  templateStart("m4", "sm4"); // doTemplate("m4", "sm4");
+
+  var myWidgets = {};
+  var viewerColors = new viewMeColors();
+
+  var arrResult;
+  var selectedLangId = $('body').attr('data-lang-i18n');
+ 
+  switch (selectedLangId){
+    case "IL" : // rtl
+      arrResult = [
+        { optVal: -1, optText: "שיחזור נכשל" },
+        { optVal:  0, optText: " - " },
+        { optVal:  1, optText: "שיחזור הושלם בהצלחה" },
+        { optVal:  2, optText: "שיחזור מתבצע כעת" }];
+    break;    
+    default : // ltr
+      arrResult = [
+        { optVal: -1, optText: "Restore Failed" },
+        { optVal:  0, optText: " - " },
+        { optVal:  1, optText: "Restore Succeeded" },
+        { optVal:  2, optText: "Restore is Running . . ." }];
+    break;   
+  }
+
+// var arrResult = [
+//   { optVal: -1, optText: "Restore Failed" },
+//   { optVal:  0, optText: " - " },
+//   { optVal:  1, optText: "Restore Succeeded" },
+//   { optVal:  2, optText: "Restore is Running . . ." }];
+
+     // $("#lastResult").hmiNumericDesc({rw:'r', dxlVar:'LoadPar_Result', selOptions: arrResult });
+     // $("#lastTime").hmiTxt({rw:'r', dxlVar:'Last_Restore' });
+
+
+  var str_h_RestoreSystem = "שיחזור מערכת:";
+  var str_h_RestoreBtn = "שיחזור";
+  var str_h_RestoreLast = "שיחזור אחרון:";
+  var str_h_RestoreLastResult = "תוצאות שיחזור אחרון:";
+  var str_h_RestoreViewAll = "הצג את כל היסטורית השחזורים:";
+  var str_h_RestoreDownload = "הורד קובץ";
+
+    myWidgets["lastResult"] = $("#lastResult").editMe({dxlVar: "LoadPar_Result", valType: "typeDesc", rw: "r", viewerText: str_h_RestoreLastResult, desc_viewerVals: arrResult, viewerText_i18n_key:"h_RestoreLastResult" });
+
+    myWidgets["lastTime"] = $("#lastTime").editMe({dxlVar: "Last_Restore", valType: "typeTxt", rw: "r", viewerText: str_h_RestoreLast, initVal:"lastTimeLastTime", viewerText_i18n_key:"h_RestoreLast"});
+
+    var strHtmlLog = "<a data-i18n='h_RestoreDownload' href='/cgi-bin/getfile.cgi?log=RESTORE_LOG&what=log&disp=attachment&ext=txt' >" + str_h_RestoreDownload + "</a>";
+    myWidgets["his"] = $("#his").editMe({dxlVar: "", valType: "typeHtml", rw: "r", viewerText: str_h_RestoreViewAll, html_val: strHtmlLog, viewerText_i18n_key:"h_RestoreViewAll"});
+
+
+    var paramOnce = "";
+    paramOnce += "LoadPar_Result|";
+    paramOnce += "Last_Restore|";
+
+    var paramOften = "";
+    paramOften += "LoadPar_Result|";
+    paramOften += "Last_Restore|";
+
+    paramOnce = paramOnce.toUpperCase(); getDataOnce(paramOnce, updateData);
+
+    var timer = 1000 * 5;  // 5 seconds
+    paramOften = paramOften.toUpperCase(); getUpdatedData(paramOften, timer, updateData);
+
+
+    $("#idParameters1").click(function() {
+      var objWidgetId = "idParameters1";
+      set_status_msg("msg_" + objWidgetId, "Running restore, Please wait  . . .", 3000);
+      $("#" + "btn_" + objWidgetId).click();
+
+      return false;
+    });
+
+
+    function formatDateTime(strDateTime) {
+      // e.g. "12:55,26/8/2015"
+
+      if (strDateTime.length > 10) {
+        var terms = strDateTime.split(',');
+        var strDate = $.trim(terms[1]);
+        var strTime = $.trim(terms[0]);
+
+        if (strTime.length < 5) {
+          var idx = strTime.indexOf(":", 0);
+          var hh = strTime.substring(0, idx);  if (hh.length < 2) hh = "0" + hh; // "1:00" -> "01:00"
+          var mm = strTime.substring(idx + 1); if (mm.length < 2) mm = "0" + mm; // "01:0" -> "01:00"
+          strTime = hh + ":" + mm;
+        }
+        return strDate + " " + strTime;
+
+      } else {
+        return " - ";
+      }
+
+    }
+
+
+  function updateData(obj) {
+    var varName, varVal, arrName, arrIndex;
+    for(var i = 0; i < obj.values.length; i++) {
+      varName = obj.values[i].name;
+      varVal = obj.values[i].value;
+
+      switch (varName) {
+
+        case "LAST_RESTORE": updateWidget("lastTime", formatDateTime(varVal[0])); break;  // pass the inner string from the array
+        case "LOADPAR_RESULT": updateWidget("lastResult", parseInt(varVal, 10)); break;
+
+        default:
+          // dbg // console.log(" * * *  case ??? *" + varName + "* ? ? ? "); // should not get here!
+          break;
+      }  // switch
+    }  // for
+  }
+
+});
+  </script>
+
+</body>
+</html>

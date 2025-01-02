@@ -1179,14 +1179,14 @@ function templateSideBar(selectedMenu, selectedSubMenu) {
     // s += " <li class='liSub" + strShowSub + "' id='cm3_sm2' ><a data-i18n='cm3_sm2_Config' href='/dig_config/dig_config.html' >Configuration</a></li>";
     // s += " <li class='liSub" + strShowSub + "' id='cm3_sm3' ><a data-i18n='cm3_sm3_Alarms' href='/dig_alarms/dig_alarms.html' >Alarms</a></li>";
     // 
-    s += "<li id='cm4' ><a data-i18n='cm4_sm0_Settings' href='/set_general/set_general.html' >Settings</a></li>";
+    s += "<li id='cm4' ><a data-i18n='cm4_sm0_Settings' href='#' xhref='/set_general/set_general.html' >Settings</a></li>";
     strShowSub = (selectedMenu == "m4") ? strShowSubCls : "";  
 	// 
     // s += " <li class='liSub" + strShowSub + "' id='cm4_sm1' ><a data-i18n='cm4_sm1_General' href='/set_general/set_general.html' >General</a></li>";
     // s += " <li class='liSub" + strShowSub + "' id='cm4_sm2' ><a data-i18n='cm4_sm2_Email' href='/set_email/set_email.html' >Email</a></li>";
     // s += " <li class='liSub" + strShowSub + " liSubSep' ><div></div></li>";	
-    s += " <li class='liSub" + strShowSub + "' id='cm4_sm3' ><a data-i18n='cm4_sm3_Backup' href='/tools_backup/tools_backup.html' >Backup</a></li>";
-    s += " <li class='liSub" + strShowSub + "' id='cm4_sm4' ><a data-i18n='cm4_sm4_Restore' href='/tools_restore/tools_restore.html' >Restore</a></li>";
+    s += " <li class='liSub" + strShowSub + "' id='cm4_sm3' ><a data-i18n='cm4_sm3_Backup' href='../tools_backup/tools_backup.html' >Backup</a></li>";
+    s += " <li class='liSub" + strShowSub + "' id='cm4_sm4' ><a data-i18n='cm4_sm4_Restore' href='../tools_restore/tools_restore.html' >Restore</a></li>";
 
     // s += "<li id='cm6' ><a data-i18n='cm6_sm0_Analyse' href='/analyse/check_tanks.html' >Analyse</a></li>";  
     // strShowSub = (selectedMenu == "m6") ? strShowSubCls : "";  
