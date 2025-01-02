@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>CSS grid scroller</title>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="shortcut icon" href="./p_data/images/favicon.ico" />
+
+<!-- script type="text/javascript" src="./p_data/js/jquery-3.7.1.min.js"></script -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- <script src="./p_data/js/thermoline_responsive.js" ></script> -->
+<!-- <script src="./p_data/js/th_widgets.js" ></script> -->
+
+  <link rel="stylesheet" type="text/css" href="./p_data/css/th_widgets.css" />
+  <link rel="stylesheet" type="text/css" href="./p_data/css/style_responsive.css" />
+<!-- <link rel="stylesheet" type="text/css" href="/panel/css/icons.css" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="./p_data/css/panel__css__icons.css" /> -->
+
+
+<style>
+
+  .hp-grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    /* grid-template-rows: repeat(10, auto);   */
+    gap: 10px;
+    direction: rtl;
+    
+    grid-template-areas:
+      "item3 item3 item6 item6 item40 item40"
+      "item8 item8 item7 item7 item41 item41"
+      "item1 item1 item1 item2 item2 item2"
+      "item9 item9 item9 item10 item10 item10 "; 
+      /* "item99 item99 item99 item99 item99 item99" */
+      /* "item98 item98 item98 item98 item98 item98"; */
+
+    transition: grid-template-areas 0.5s ease-in-out; /* Smooth transitions */
+	
+    padding: 0 10px;
+  }
+
+  .hp-grid-area {
+    padding: 10px 20px;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+    display: grid;
+    gap: 2px 10px;
+    direction: rtl;
+    align-content: start;
+  }
+
+  .hp-grid-area-01 { grid-area: item1; }   /* תאורה */
+  .hp-grid-area-02 { grid-area: item2; }   /* מאווררים */
+  .hp-grid-area-03 { grid-area: item3; }   /* מיכל חלב סילו */
+  .hp-grid-area-040 { grid-area: item40; }   /* מיכל 24 */
+  .hp-grid-area-041 { grid-area: item41; }   /* מיכל 24 שטיפה */
+  .hp-grid-area-05 { grid-area: item5; }   /* אויר דחוס */
+  .hp-grid-area-06 { grid-area: item6; }   /* חליבה */
+  .hp-grid-area-07 { grid-area: item7; }   /* שטיפת צנרת */
+  .hp-grid-area-08 { grid-area: item8; }   /* חדר מכונות */ /* הסקת מים חמים */
+  .hp-grid-area-09 { grid-area: item9; }   /* קירור מוקדם */
+  .hp-grid-area-10 { grid-area: item10; }  /* קירור סופי */
+
+  .hp-grid-area-99 { grid-area: item99; background-color: var(--colWidgetDisabled_bg); display: none; }  /* ?לא בשימוש yellow */
+  .hp-grid-area-98 { grid-area: item98; background-color: var(--colWidgetDisabled_bg); display: none; }  /* !לא בשימוש */
+
+
+
+div#content button.btnToggleScroll {
+  position: absolute; /* Absolute positioning inside the grid */
+  top: 10px; 
+  left: 10px;  
+  padding: 10px 20px;
+  background-color: var(--col4_bg);
+  background-color: darkblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: auto;
+  font-weight: normal;
+  z-index: 10; /* Ensure it appears on top of other grid items */
+}
+
+div#content button.btnToggleScroll:hover {
+  background-color: var(--col4_bg_light);
+  background-color: blue;
+}
+
+.btnToggleScroll .btnImg {
+  font-size: 120%;
+}
+
+@media only screen and (min-width: 1400px) {
+  .container.floated { width: 1400px; }
+
+
+
+
+}
+/* @media only screen and (min-width: 768px) and (max-width: 959px) { */
+@media only screen and (max-width: 959px) {
+
+  .hp-grid-container {
+    grid-template-columns: repeat(2, 1fr); 
+    grid-template-rows: repeat(8, auto);   
+
+    grid-template-areas:
+      "item6 item7"
+      "item3 item8"
+      "item40 item41"
+      "item1 item2"
+      "item9 item10";
+  }
+  
+}  
+@media only screen and (max-width: 767px) {
+
+  .hp-grid-container {
+    grid-template-columns: repeat(1, 1fr); 
+    grid-template-rows: repeat(13, auto);   
+
+    grid-template-areas:
+      " item6 "
+      " item7 "
+      " item3 "
+      " item40 "
+      " item41 "
+      " item2 "
+      " item1 "
+      " item9 "
+      " item10 "
+      " item8 ";
+  }
+  
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+}
+@media only screen and (max-width: 479px) {
+}
+
+</style>
+
+</head>
+
+<body>
+
+  <div class="container floated" id="c_header_logo">Header - Logo</div>
+  <div class="container containerRTL floated" id="c_header_main_menu">Header - Main Menu</div>
+
+  <div id="content" style="position: relative;" >
+     
+    <div class="container containerRTL floated" > <!-- "position: relative, display: block; -->
+      <div class="sixteen columns">&nbsp;</div><div class="clearfix"></div>
+
+      <p style="color: red">resize page for different grid layout...</p>
+	  
+      <div class="hp-grid-container">
+	    <button id="btnToggleScroll" class="btnToggleScroll" style="position: absolute;top: 10px;left: 30px;">
+	      <!-- <i class="icon-play"></i>  -->
+	      <!-- <i class="icon-pause"></i> -->
+		  <span class="btnImg icon-play" >&#9205;</span>
+		  <span class="btnImg icon-pause" >&#9208;</span>
+	      <span class="btnText">Pause Scroll</span>
+	    </button>
+        <div class="hp-grid-area hp-grid-area-01">
+          <div class="hp-grid-area-title">#1  תאורה</div>
+        </div>
+        <div class="hp-grid-area hp-grid-area-02">
+          <div class="hp-grid-area-title">#2 מאווררים </div>
+       </div>
+        <div class="hp-grid-area hp-grid-area-03">
+          <div class="hp-grid-area-title">#3 טנק סילו </div>
+        </div>
+        <div class="hp-grid-area hp-grid-area-040">
+          <div class="hp-grid-area-title">#40 טנק 24 </div>
+      </div>
+        <div class="hp-grid-area hp-grid-area-041">
+          <div class="hp-grid-area-title">#41 טנק 24 שטיפה </div>
+       </div>
+        <div class="hp-grid-area hp-grid-area-06">
+          <div class="hp-grid-area-title">#6 חליבה </div>
+        </div>
+        <div class="hp-grid-area hp-grid-area-07">
+          <div class="hp-grid-area-title">#7 שטיפת צנרת </div>
+        </div>
+        <div class="hp-grid-area hp-grid-area-08">
+          <div class="hp-grid-area-title">#8 חדר מכונות </div>
+      </div>
+        <div class="hp-grid-area hp-grid-area-09">
+          <div class="hp-grid-area-title">#9 קירור מוקדם </div>
+       </div>
+        <div class="hp-grid-area hp-grid-area-10">
+          <div class="hp-grid-area-title">#10 קירור סופי </div>
+        </div>
+
+      </div>
+	  
+      <div class="clearfix"></div>
+
+  </div>
+  </div>
+
+  <div class="container floated" id="c_footer">Footer</div>
+
+  <script type="text/javascript">
+$(document).ready(function(){
+
+  // doTemplate("m1", "");
+
+  function getGridAreas() { // fetch current grid-template-areas
+    const gridContainer = document.querySelector(".hp-grid-container");
+    const computedStyle = window.getComputedStyle(gridContainer);
+    const gridAreas = computedStyle.getPropertyValue("grid-template-areas").trim();
+
+    const rows = gridAreas
+    .split('"')                        // Split by quotes
+    .filter(row => row.trim() !== ""); // Remove empty entries
+
+    return rows;
+  }
+  
+  function scrollGridAreas() {
+    const currentAreas = getGridAreas();
+	// dbg // console.log(currentAreas);
+    if (currentAreas.length > 0) {    
+      const updatedAreas = currentAreas.slice(1).concat(currentAreas[0]); // Shift the first row to the end      
+      // dbg // const joinedAreas = updatedAreas.join('" "'); // Step 2 // item1 item1 item2" "item3 item4 item5" "item6 item6 item6
+      // dbg // const gridTemplateString = `"${joinedAreas}"`; // Step 3 // "item1 item1 item2" "item3 item4 item5" "item6 item6 item6"
+      // dbg // $(".grid-container").css("grid-template-areas", gridTemplateString); // Step 4
+      $(".hp-grid-container").css("grid-template-areas", `"${updatedAreas.join('" "')}"`);
+    }
+  }
+  
+  // setInterval(scrollGridAreas, 6000); // 60000 ms = 1 minute // Scroll rows every minute
+
+  let scrollInterval;
+  let isScrolling = true;
+
+  function oneScrolling() {
+    scrollGridAreas();
+  }
+  function startScrolling() {
+    scrollInterval = setInterval(scrollGridAreas, 2000); // 60000 ms = 1 minute // Scroll rows every minute
+    $("#btnToggleScroll .btnText").text("Pause Scroll");
+    $("#btnToggleScroll .icon-pause").show();
+    $("#btnToggleScroll .icon-play").hide();
+    isScrolling = true;
+  }
+
+  function stopScrolling() {
+    clearInterval(scrollInterval);
+    $("#btnToggleScroll .btnText").text("Continue Scroll");
+    $("#btnToggleScroll .icon-play").show();
+    $("#btnToggleScroll .icon-pause").hide();
+    isScrolling = false;
+  }
+
+  $("#btnToggleScroll").click(function () {
+    if (isScrolling) {
+      stopScrolling();
+    } else {
+      oneScrolling();     // immediate
+      startScrolling();   // after time period.
+    }
+  });
+  
+  startScrolling(); // Initially start scrolling when page loads
+  
+  $(window).on("resize", () => {   // On window resize, reset grid layout.
+    // dbg // console.log("resize");	 
+    $('.hp-grid-container').css('grid-template-areas', ''); // Clear custom grid areas
+  });
+  
+
+});
+  </script>
+</body>
+</html>
