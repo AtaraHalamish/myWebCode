@@ -124,7 +124,7 @@
           <h2 data-i18n="h2_BackupHistory" >Backup History</h2>
           <div class="tbl_row"><div class="wDesc" data-i18n="h_BackupLast" >Last backup: </div> <div id="lastTime" class="wEdit lastTime" ></div></div>
           <div class="tbl_row"><div class="wDesc" data-i18n="h_BackupLastResult" >Last backup result: </div> <div id="lastResult" class="wEdit lastResult" ></div></div>
-          <div class="tbl_row"><div class="wDesc" data-i18n="h_BackupViewAll" >View all backups history: </div> <div id="his" class="wEdit his" ><a data-i18n="h_BackupDownload" href="/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt" >Download File</a></div></div>		  
+          <div class="tbl_row"><div class="wDesc" data-i18n="h_BackupViewAll" >View all backups history: </div> <div id="his" class="wEdit his" ><a data-i18n="h_BackupDownload" href="#" xhref="/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt" >Download File</a></div></div>		  
       </div>
 
     </div>
@@ -198,7 +198,7 @@ $( document ).ready(function() {
 
     myWidgets["lastTime"] = $("#lastTime").editMe({dxlVar: "Last_Backup", valType: "typeTxt", rw: "r", viewerText: str_h_BackupLast, initVal:"lastTimeLastTime", viewerText_i18n_key:"h_BackupLast"});
 
-    var strHtmlLog = "<a data-i18n='h_BackupDownload' href='/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt' >" + str_h_BackupDownload + "</a>";
+    var strHtmlLog = "<a data-i18n='h_BackupDownload' href='#' xhref='/cgi-bin/getfile.cgi?log=BACKUP_LOG&what=log&disp=attachment&ext=txt' >" + str_h_BackupDownload + "</a>";
     myWidgets["his"] = $("#his").editMe({dxlVar: "", valType: "typeHtml", rw: "r", viewerText: str_h_BackupViewAll, html_val: strHtmlLog, viewerText_i18n_key:"h_BackupViewAll"});
 
 
